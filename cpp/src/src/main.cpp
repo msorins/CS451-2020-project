@@ -93,7 +93,6 @@ int main(int argc, char **argv) {
   std::cout << "Doing some initialization...\n\n";
 
   Coordinator coordinator(parser.id(), barrier, signal);
-
   std::cout << "Waiting for all processes to finish initialization\n\n";
   coordinator.waitOnBarrier();
 

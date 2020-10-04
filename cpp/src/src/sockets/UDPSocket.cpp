@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <iostream>
-
+#include <string>
 namespace da {
 namespace sockets {
     UDPSocket::UDPSocket(std::string ip, int port): Socket(ip, port) {
@@ -32,9 +32,7 @@ namespace sockets {
         sendto(this->socket_file_descriptor, static_cast<void*>(&len), sizeof(len), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), sizeof (this->socket_address));
 
         // send the actual string
-        // char dataChar{data.c_str()}
-
-        // /sendto(this->socket_file_descriptor, (int*)&link, sizeof(link), 0, (struct sockaddr *) &server, sizeof (server));
+        sendto(this->socket_file_descriptor, data.c_str(), data.length(), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), sizeof(this->socket_address));
     }
 
     std::string UDPSocket::receive() {
@@ -45,12 +43,26 @@ namespace sockets {
             exit(-1);
         }
 
+        // receive the length
         uint32_t len_received_net;
         socklen_t socket_addr_sizeof = sizeof(this->socket_address);
-        recvfrom(this->socket_file_descriptor, &len_received_net, sizeof(len_received_net), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof);
-        
+        if(recvfrom(this->socket_file_descriptor, &len_received_net, sizeof(len_received_net), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0) {
+            perror("cannot receive 1");
+            exit(-1);
+        }
         int len_received = ntohs(len_received_net);
-        return "the value received was: " + std::to_string(len_received);
+
+        // receive the string
+        std::cout << "received data of length: " << len_received << "\n";
+        char* recvbuf = new char[len_received + 3];
+        if(recvfrom(this->socket_file_descriptor, recvbuf, len_received, 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0 ) {
+            perror("cannot receive 2");
+            exit(-1);
+        } 
+        recvbuf[len_received] = '\0';
+        std::cout << "string received is: " << recvbuf << "\n";
+        std::string received(recvbuf);
+        return received;
     }
 }
 }
