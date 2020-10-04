@@ -97,7 +97,7 @@ The supported arguments are:
 
 Where:
   - `ID` specifies the unique identifier of the process. In a system of `m` processes, the identifiers are `1`...`m`.
-  - `HOSTS` specifies the path to a file that contains the information about every process in the system, i.e., it describes the system membership. The file contains as many lines as processes in the system. A process identity consists of a numerical process identifier, the IP address or name of the process and the port number on which the process is listening for incoming messages. The entries of each process identity are separated by white space character. The following is an example of the contents of a `HOSTS` file for a system of 5 processes:
+  - `HOSTS` specifies the path to a file that contains the information about every process in the system, i.e., it describes the system membership. The file contains as many lines as processes in the system. A process identity consists of a numerical process identifier, the IP address or name of the process and the port number on which the process is listening for incoming messages. The entries of each process identity are separated by white space character. The following is an example of the contents of a `HOSTS` file for a system of 5 processes:`
   ```
 2 localhost 11002
 5 127.0.0.1 11005
@@ -193,3 +193,22 @@ In this example we specify that process `1` is affected by messages broadcast by
 We say that a process `x` is affected by a process `z` if all the messages which process `z` broadcasts and which process `x` delivers become dependencies for all future messages broadcast by process `x`. We call these dependencies *localized*. If a process is not affected by any other process, messages it broadcasts only depend on its previously broadcast messages (due to the FIFO property).
 
 *Note*:  In the default causal broadcast (this algorithm will be discussed in one of the lectures) each process affects `all` processes. In this algorithm we can selectively define which process affects some other process.
+
+
+# So' s readme:
+
+```
+docker build -f docker/Dockerfile -t da:latest . 
+docker run -v ${PWD}/cpp:/cpp -it da:latest /bin/bash
+
+# Build
+/cpp/build.sh
+
+# SetUp barrier & finishedSignal
+/root/barrier.py -p 2
+/root/finishedSignal.py -p 2
+
+# Run
+/cpp/bin/da_proc --id 1 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-1.txt
+/cpp/bin/da_proc --id 2 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-2.txt --config /root/config.txt
+```
