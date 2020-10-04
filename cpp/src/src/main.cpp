@@ -7,7 +7,8 @@
 #include "parser.hpp"
 #include "hello.h"
 #include <signal.h>
-#include "sockets/UDPSocket.h"
+#include "sockets/FairLossSocket.h"
+#include "sockets/StubbornSocket.h"
 
 static void stop(int) {
   // reset signal handlers to default
@@ -99,15 +100,12 @@ int main(int argc, char **argv) {
   if(parser.id() == 1) {
     std::cout << "port: " << hosts[1].portReadable() << " " << static_cast<int>(hosts[1].portReadable()) << "\n";
 
-    auto socket = da::sockets::UDPSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-    while(true) {
-      socket.send("hello");
-      sleep(1);
-    }
+    auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
+    socket.send("hello there");
   }
   
   if(parser.id() == 2) {
-    auto socket = da::sockets::UDPSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
+    auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
     std::cout << socket.receive() << "\n";
     std::cout << "finished receiving \n";
   }
