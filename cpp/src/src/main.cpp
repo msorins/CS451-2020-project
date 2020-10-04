@@ -1,12 +1,13 @@
 #include <chrono>
 #include <iostream>
+#include <string>
 #include <thread>
 
 #include "barrier.hpp"
 #include "parser.hpp"
 #include "hello.h"
 #include <signal.h>
-
+#include "sockets/UDPSocket.h"
 
 static void stop(int) {
   // reset signal handlers to default
@@ -50,6 +51,7 @@ int main(int argc, char **argv) {
   std::cout << "List of resolved hosts is:\n";
   std::cout << "==========================\n";
   auto hosts = parser.hosts();
+
   for (auto &host : hosts) {
     std::cout << host.id << "\n";
     std::cout << "Human-readable IP: " << host.ipReadable() << "\n";
@@ -94,6 +96,22 @@ int main(int argc, char **argv) {
 
   std::cout << "Waiting for all processes to finish initialization\n\n";
   coordinator.waitOnBarrier();
+
+  if(parser.id() == 1) {
+    std::cout << "port: " << hosts[1].portReadable() << " " << static_cast<int>(hosts[1].portReadable()) << "\n";
+
+    auto socket = da::sockets::UDPSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
+    while(true) {
+      socket.send("hello");
+      sleep(1);
+    }
+  }
+  
+  if(parser.id() == 2) {
+    auto socket = da::sockets::UDPSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
+    std::cout << socket.receive() << "\n";
+    std::cout << "finished receiving \n";
+  }
 
   std::cout << "Broadcasting messages...\n\n";
 
