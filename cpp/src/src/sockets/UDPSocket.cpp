@@ -45,11 +45,11 @@ namespace sockets {
             exit(-1);
         }
 
-        uint32_t len_received;
+        uint32_t len_received_net;
         socklen_t socket_addr_sizeof = sizeof(this->socket_address);
-        recvfrom(this->socket_file_descriptor, &len_received, sizeof(len_received), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof);
+        recvfrom(this->socket_file_descriptor, &len_received_net, sizeof(len_received_net), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof);
         
-        int len_received_f = ntohs(len_received);
+        int len_received = ntohs(len_received_net);
         return "the value received was: " + std::to_string(len_received);
     }
 }
