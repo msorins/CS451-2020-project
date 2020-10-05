@@ -2,7 +2,7 @@
 #include "FairLossSocket.h"
 #include "StubbornSocket.h"
 #include <iostream>
-
+#include <unistd.h>
 namespace da
 {
     namespace sockets
@@ -17,6 +17,7 @@ namespace da
             while (true)
             {
                 FairLossSocket::send(data);
+                usleep(100000);
             }
         }
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Data.h"
 
 namespace da
@@ -22,6 +23,10 @@ namespace da
         {
             // Return increased seq number
             return ++da::sockets::Data::seq_number_static;
+        }
+
+        std::string Data::getUniqueIdentifier() {
+            return std::to_string(this->from_pid) + ":" + std::to_string(this->seq_number);
         }
 
         std::ostream &operator<<(std::ostream &os, const Data &data)

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #ifndef DATA
 #define DATA
@@ -23,6 +24,8 @@ namespace da
             Data(int seq_number, int from_pid, int to_pid, int data);
 
             static int increaseSeqNumber();
+
+            std::string getUniqueIdentifier();
 
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };

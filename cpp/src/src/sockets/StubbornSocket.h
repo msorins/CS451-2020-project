@@ -3,7 +3,7 @@
 
 #include "Socket.h"
 #include "FairLossSocket.h"
-
+#include <unordered_set>
 namespace da
 {
     namespace sockets
@@ -13,7 +13,7 @@ namespace da
         public:
             StubbornSocket(std::string ip, int port);
 
-            // Send String data over UDP channel
+            // Send data
             void send(Data data);
         };
 
