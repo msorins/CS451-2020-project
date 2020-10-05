@@ -12,7 +12,7 @@ namespace da
         {
         }
 
-        void StubbornSocket::send(std::string data)
+        void StubbornSocket::send(Data data)
         {
             while (true)
             {

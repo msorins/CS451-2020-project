@@ -12,6 +12,7 @@
 #define FAIR_LOSS_SOCKET
 
 #include "Socket.h"
+#include "Data.h"
 namespace da
 {
     namespace sockets
@@ -27,11 +28,11 @@ namespace da
             FairLossSocket(std::string ip, int port);
 
             // Send String data over UDP channel
-            void send(std::string data);
+            void send(Data data);
 
             // Receive data over UDP channel
             // All the data will be received in format <lengthOfString: uint32_t> <string>
-            std::string receive();
+            Data receive();
         };
 
     } // namespace sockets

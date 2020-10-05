@@ -9,6 +9,7 @@
 #include <signal.h>
 #include "sockets/FairLossSocket.h"
 #include "sockets/StubbornSocket.h"
+#include "sockets/Data.h"
 
 static void stop(int) {
   // reset signal handlers to default
@@ -101,13 +102,12 @@ int main(int argc, char **argv) {
     std::cout << "port: " << hosts[1].portReadable() << " " << static_cast<int>(hosts[1].portReadable()) << "\n";
 
     auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-    socket.send("hello there");
+    socket.send(da::sockets::Data(1, 2, 99)); // data, to_pid
   }
   
   if(parser.id() == 2) {
     auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-    std::cout << socket.receive() << "\n";
-    std::cout << "finished receiving \n";
+    std::cout << "finished receiving: " << socket.receive() << "\n";
   }
 
   std::cout << "Broadcasting messages...\n\n";

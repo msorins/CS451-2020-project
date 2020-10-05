@@ -14,7 +14,7 @@ namespace da
             StubbornSocket(std::string ip, int port);
 
             // Send String data over UDP channel
-            void send(std::string data);
+            void send(Data data);
         };
 
     } // namespace sockets
