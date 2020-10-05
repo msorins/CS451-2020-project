@@ -10,8 +10,10 @@
 #include "sockets/FairLossSocket.h"
 #include "sockets/StubbornSocket.h"
 #include "sockets/Data.h"
+#include "threads/ThreadPool.h"
 
-static void stop(int) {
+static void stop(int)
+{
   // reset signal handlers to default
   signal(SIGTERM, SIG_DFL);
   signal(SIGINT, SIG_DFL);
@@ -26,7 +28,8 @@ static void stop(int) {
   exit(0);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   signal(SIGTERM, stop);
   signal(SIGINT, stop);
 
@@ -54,7 +57,8 @@ int main(int argc, char **argv) {
   std::cout << "==========================\n";
   auto hosts = parser.hosts();
 
-  for (auto &host : hosts) {
+  for (auto &host : hosts)
+  {
     std::cout << host.id << "\n";
     std::cout << "Human-readable IP: " << host.ipReadable() << "\n";
     std::cout << "Machine-readable IP: " << host.ip << "\n";
@@ -86,7 +90,8 @@ int main(int argc, char **argv) {
   std::cout << "===============\n";
   std::cout << parser.outputPath() << "\n\n";
 
-  if (requireConfig) {
+  if (requireConfig)
+  {
     std::cout << "Path to config:\n";
     std::cout << "===============\n";
     std::cout << parser.configPath() << "\n\n";
@@ -98,16 +103,31 @@ int main(int argc, char **argv) {
   std::cout << "Waiting for all processes to finish initialization\n\n";
   coordinator.waitOnBarrier();
 
-  if(parser.id() == 1) {
+  if (parser.id() == 1)
+  {
     std::cout << "port: " << hosts[1].portReadable() << " " << static_cast<int>(hosts[1].portReadable()) << "\n";
 
+    da::threads::ThreadPool pool{4};
     auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-    socket.send(da::sockets::Data(1, 2, 99)); // data, to_pid
+
+    auto f1 = pool.enqueue([&]() noexcept {
+       socket.send(da::sockets::Data(1, 2, 99));
+    });
+
+    auto f2 = pool.enqueue([&]() noexcept {
+       socket.send(da::sockets::Data(1, 2, 101)); // data, to_pid
+    });
   }
-  
-  if(parser.id() == 2) {
+
+  if (parser.id() == 2)
+  {
     auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-    std::cout << "finished receiving: " << socket.receive() << "\n";
+    da::threads::ThreadPool pool{4};
+    auto f1 = pool.enqueue([&]() noexcept {
+       return socket.receive();
+    });
+    auto f1_result = f1.get();
+    std::cout << "finished receiving: " << f1_result << "\n";
   }
 
   std::cout << "Broadcasting messages...\n\n";
@@ -115,8 +135,8 @@ int main(int argc, char **argv) {
   std::cout << "Signaling end of broadcasting messages\n\n";
   coordinator.finishedBroadcasting();
 
-
-  while (true) {
+  while (true)
+  {
     std::this_thread::sleep_for(std::chrono::seconds(60));
   }
 

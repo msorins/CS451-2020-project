@@ -16,7 +16,7 @@ namespace da
 {
     namespace sockets
     {
-        FairLossSocket::FairLossSocket(std::string ip, int port): Socket(ip, port)
+        FairLossSocket::FairLossSocket(std::string ip, int port) : Socket(ip, port)
         {
             this->socket_file_descriptor = socket(AF_INET, SOCK_DGRAM, 0);
             if (this->socket_file_descriptor == -1)
@@ -52,7 +52,7 @@ namespace da
             // receive the data
             socklen_t socket_addr_sizeof = sizeof(this->socket_address);
             int data[4];
-            if (recvfrom(this->socket_file_descriptor, &data,  sizeof(data), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0)
+            if (recvfrom(this->socket_file_descriptor, &data, sizeof(data), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0)
             {
                 perror("cannot receive 2");
                 exit(-1);
