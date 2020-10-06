@@ -6,7 +6,7 @@ namespace da
 {
     namespace broadcast
     {
-        UniformReliableBroadcast::UniformReliableBroadcast(std::vector<Parser::Host> hosts) : hosts{hosts}
+        UniformReliableBroadcast::UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger) : hosts{hosts}, logger{logger}
         {
         }
 
@@ -18,6 +18,9 @@ namespace da
             auto &tp = da::threads::ThreadPool::getInstance();
             for (const auto &host: this->hosts)
             {
+                std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
+                this->logger.write(logMsg);
+
                 // Skip sending to myself
                 if(static_cast<int>(host.id) == data.from_pid) {
                     continue;
@@ -62,7 +65,8 @@ namespace da
 
         void UniformReliableBroadcast::deliver(da::sockets::Data &data)
         {
-            std::cout << "urb deliver: " << data << "\n";
+            std::string logMsg = "d " + std::to_string(data.seq_number) + " " + std::to_string(data.from_pid) + "\n";
+            this->logger.write(logMsg);
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
                 this->pending.insert(data.getUniqueIdentifier());
                 this->broadcast(data);

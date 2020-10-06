@@ -7,6 +7,7 @@
 #include "../sockets/PerfectSocket.h"
 #include "../threads/ThreadPool.h"
 #include "../sockets/SocketType.h"
+#include "../tools/Logger.h"
 #include "parser.hpp"
 
 #ifndef UNIFORM_RELIABLE_BROADCAST
@@ -20,6 +21,7 @@ namespace da
         {
             private:
                 std::vector<Parser::Host> hosts;
+                da::tools::Logger &logger;
 
                 std::unordered_set<std::string> pending; // package_unique_identifier: string
                 std::unordered_map<std::string, int> ack; // <package_unique_identifier:string ; count:integer:
@@ -27,7 +29,7 @@ namespace da
 
             public:
 
-                UniformReliableBroadcast(std::vector<Parser::Host> hosts);
+                UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger);
 
                 void broadcast(da::sockets::Data &data);
 

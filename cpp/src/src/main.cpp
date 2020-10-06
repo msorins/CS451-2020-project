@@ -13,9 +13,10 @@
 #include "sockets/Data.h"
 #include "sockets/SocketType.h"
 #include "threads/ThreadPool.h"
+#include "tools/Logger.h"
 #include "broadcast/UniformReliableBroadcast.h"
-#include "tools/Subject.h"
 int getNrOfBroadcastMessages(std::string filePath);
+da::tools::Logger *logger;
 
 static void stop(int)
 {
@@ -25,9 +26,11 @@ static void stop(int)
 
   // immediately stop network packet processing
   std::cout << "Immediately stopping network packet processing.\n";
+  // !!! To Do !!!
 
   // write/flush output file if necessary
   std::cout << "Writing output.\n";
+  logger->closeFile();
 
   // exit directly from signal handler
   exit(0);
@@ -111,7 +114,8 @@ int main(int argc, char **argv)
   // START INIT
   int m = getNrOfBroadcastMessages(std::string(parser.configPath()));
   std::cout << "Nr of messages per process is: " << m << "\n";
-  da::broadcast::UniformReliableBroadcast urb(parser.hosts());
+  logger = new da::tools::Logger(parser.outputPath());
+  da::broadcast::UniformReliableBroadcast urb(parser.hosts(), *logger);
   // END INIT
 
   Coordinator coordinator(parser.id(), barrier, signal);
@@ -147,6 +151,5 @@ int main(int argc, char **argv)
     std::this_thread::sleep_for(std::chrono::seconds(60));
   }
 
-  da::tools::Subject *subject = new da::tools::Subject;
   return 0;
 }

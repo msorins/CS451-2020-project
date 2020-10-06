@@ -14,7 +14,7 @@ namespace da
 
         void StubbornSocket::send(Data data)
         {
-            std::cout << "stubborn link sending <" << data << "> to " << this->ip << ":" << std::to_string(this->port) << "\n";
+//            std::cout << "stubborn link sending <" << data << "> to " << this->ip << ":" << std::to_string(this->port) << "\n";
             while (true)
             {
                 FairLossSocket::send(data);
