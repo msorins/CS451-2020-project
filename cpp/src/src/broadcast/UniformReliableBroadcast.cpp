@@ -10,13 +10,13 @@ namespace da
         {
         }
 
-        void UniformReliableBroadcast::broadcast(da::sockets::Data data)
+        void UniformReliableBroadcast::broadcast(da::sockets::Data &data)
         {
             this->pending.insert(data.getUniqueIdentifier());
 
             // Create a thread pool with enough threads for each host (as this is never ending)
             auto &tp = da::threads::ThreadPool::getInstance();
-            for (auto &host: this->hosts)
+            for (const auto &host: this->hosts)
             {
                 // Skip sending to myself
                 if(static_cast<int>(host.id) == data.from_pid) {
@@ -31,18 +31,18 @@ namespace da
             }
         }
 
-        da::sockets::Data UniformReliableBroadcast::receive(da::sockets::PerfectSocket socket)
+        da::sockets::Data UniformReliableBroadcast::receive(da::sockets::PerfectSocket &socket)
         {
             return socket.receive();
         }
 
-        void UniformReliableBroadcast::receive_loop(da::sockets::PerfectSocket socket)
+        void UniformReliableBroadcast::receive_loop(da::sockets::PerfectSocket &socket)
         {
             auto &tp = da::threads::ThreadPool::getInstance();
             tp.enqueue([&]() noexcept {
                 while (true)
                 {
-                    std::cout << "-> do receive <- \n";
+                    std::cout << "uniform reliable broadcast receive loop \n";
                     da::sockets::Data data = this->receive(socket);
                 }
             });
@@ -50,11 +50,11 @@ namespace da
             std::cout << "receive loop is done \n";
         }
 
-        void UniformReliableBroadcast::deliver(da::sockets::Data data)
+        void UniformReliableBroadcast::deliver(da::sockets::Data &data)
         {
         }
 
-        bool UniformReliableBroadcast::canDeliver(da::sockets::Data m)
+        bool UniformReliableBroadcast::canDeliver(da::sockets::Data &m)
         {
             return false;
         }

@@ -16,7 +16,7 @@ namespace da
             StubbornSocket(std::string ip, int port, SocketType socketType);
 
             // Send data
-            void send(Data data);
+            void send(Data &data);
         };
 
     } // namespace sockets

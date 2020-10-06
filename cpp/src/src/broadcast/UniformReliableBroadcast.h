@@ -24,21 +24,21 @@ namespace da
                 std::unordered_set<std::string> delivered;
                 std::unordered_set<std::string> pending;
                 std::unordered_set<std::string> ack;
-                std::unordered_map<std::string, da::sockets::Data> packets; // will contain all the packets 
+                std::unordered_map<std::string, const da::sockets::Data&> packets; // will contain all the packets
 
             public:
 
                 UniformReliableBroadcast(std::vector<Parser::Host> hosts);
 
-                void broadcast(da::sockets::Data data);
+                void broadcast(da::sockets::Data &data);
 
-                da::sockets::Data receive(da::sockets::PerfectSocket socket);
+                da::sockets::Data receive(da::sockets::PerfectSocket &socket);
 
-                void receive_loop(da::sockets::PerfectSocket socket);
+                void receive_loop(da::sockets::PerfectSocket &socket);
 
-                void deliver(da::sockets::Data data);
+                void deliver(da::sockets::Data &data);
 
-                bool canDeliver(da::sockets::Data m);
+                bool canDeliver(da::sockets::Data &m);
 
         };
     } // namespace broadcast

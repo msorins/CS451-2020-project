@@ -30,9 +30,11 @@ namespace da
                 {
                     // mark it as found
                     this->wasDelivered.insert(unique_packet_identifier);
+                    std::cout << "perfect link receiving <" << data << "> on " << this->ip << ":" << std::to_string(this->port) << "\n";
                     return data;
                 }
             }
+
         }
 
     } // namespace sockets
