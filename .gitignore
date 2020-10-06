@@ -6,4 +6,4 @@ cpp/src/.idea/
 
 *.cmake
 
-cpp/src/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdC/
+cpp/src/cmake-build-debug/

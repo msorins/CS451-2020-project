@@ -31,11 +31,13 @@ namespace da
             int optval = 1;
             setsockopt(this->socket_file_descriptor, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
 
-            auto i = bind(this->socket_file_descriptor, reinterpret_cast<struct sockaddr *>(&socket_address), sizeof(socket_address));
-            if (i == -1)
-            {
-                perror("cannot bind");
-                exit(-1);
+            if(socketType == da::sockets::SocketType::RECEIVE) {
+                auto i = bind(this->socket_file_descriptor, reinterpret_cast<struct sockaddr *>(&socket_address), sizeof(socket_address));
+                if (i == -1)
+                {
+                    perror("cannot bind");
+                    exit(-1);
+                }
             }
         }
 

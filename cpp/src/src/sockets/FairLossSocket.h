@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <string>
-
 #ifndef FAIR_LOSS_SOCKET
 #define FAIR_LOSS_SOCKET
 
