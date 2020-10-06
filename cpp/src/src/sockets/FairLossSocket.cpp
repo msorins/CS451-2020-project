@@ -16,7 +16,7 @@ namespace da
 {
     namespace sockets
     {
-        FairLossSocket::FairLossSocket(std::string ip, int port) : Socket(ip, port)
+        FairLossSocket::FairLossSocket(std::string ip, int port, SocketType socketType) : Socket(ip, port, socketType)
         {
             this->socket_file_descriptor = socket(AF_INET, SOCK_DGRAM, 0);
             if (this->socket_file_descriptor == -1)

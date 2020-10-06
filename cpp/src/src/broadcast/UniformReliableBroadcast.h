@@ -6,6 +6,7 @@
 #include "../sockets/Data.h"
 #include "../sockets/PerfectSocket.h"
 #include "../threads/ThreadPool.h"
+#include "../sockets/SocketType.h"
 #include "parser.hpp"
 
 #ifndef UNIFORM_RELIABLE_BROADCAST

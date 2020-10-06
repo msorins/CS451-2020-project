@@ -25,10 +25,10 @@ namespace da
 
                 // Send the message in a thread pool
                 tp.enqueue([&]() noexcept {
-                    da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable());
+                    da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
                     socket.send(data);
                 });
-            }   
+            }
         }
 
         da::sockets::Data UniformReliableBroadcast::receive(da::sockets::PerfectSocket socket)

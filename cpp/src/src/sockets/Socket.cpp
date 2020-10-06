@@ -6,7 +6,7 @@ namespace da
 {
     namespace sockets
     {   
-        Socket::Socket(std::string ip, int port): ip{ip}, port{port}
+        Socket::Socket(std::string ip, int port, SocketType socketType): ip{ip}, port{port}, socketType{socketType}
         {
         }
     } // namespace sockets

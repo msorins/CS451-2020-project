@@ -8,7 +8,7 @@ namespace da
     namespace sockets
     {
 
-        StubbornSocket::StubbornSocket(std::string ip, int port) : FairLossSocket(ip, port)
+        StubbornSocket::StubbornSocket(std::string ip, int port, SocketType socketType) : FairLossSocket(ip, port, socketType)
         {
         }
 

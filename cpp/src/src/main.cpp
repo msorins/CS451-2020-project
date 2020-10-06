@@ -11,6 +11,7 @@
 #include "sockets/StubbornSocket.h"
 #include "sockets/PerfectSocket.h"
 #include "sockets/Data.h"
+#include "sockets/SocketType.h"
 #include "threads/ThreadPool.h"
 #include "broadcast/UniformReliableBroadcast.h"
 #include "tools/Subject.h"
@@ -125,7 +126,7 @@ int main(int argc, char **argv)
       currentHostIndex = i;
     }
   }
-  auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()));
+  auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()), da::sockets::SocketType::RECEIVE);
   urb.receive_loop(selfSocket);
   // END RECEIVING
 

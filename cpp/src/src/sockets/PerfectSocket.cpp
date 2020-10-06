@@ -12,7 +12,7 @@ namespace da
     namespace sockets
     {
 
-        PerfectSocket::PerfectSocket(std::string ip, int port) : StubbornSocket(ip, port)
+        PerfectSocket::PerfectSocket(std::string ip, int port, SocketType socketType) : StubbornSocket(ip, port, socketType)
         {
         }
 

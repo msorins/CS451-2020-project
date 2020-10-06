@@ -13,6 +13,8 @@
 
 #include "Socket.h"
 #include "Data.h"
+#include "SocketType.h"
+
 namespace da
 {
     namespace sockets
@@ -25,7 +27,7 @@ namespace da
             struct sockaddr_in socket_address;
 
         public:
-            FairLossSocket(std::string ip, int port);
+            FairLossSocket(std::string ip, int port, SocketType socketType);
 
             // Send String data over UDP channel
             void send(Data data);
