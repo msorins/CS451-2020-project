@@ -13,6 +13,7 @@
 #include "sockets/Data.h"
 #include "threads/ThreadPool.h"
 #include "broadcast/UniformReliableBroadcast.h"
+#include "tools/Subject.h"
 int getNrOfBroadcastMessages(std::string filePath);
 
 static void stop(int)
@@ -145,5 +146,6 @@ int main(int argc, char **argv)
     std::this_thread::sleep_for(std::chrono::seconds(60));
   }
 
+  Subject *subject = new Subject;
   return 0;
 }

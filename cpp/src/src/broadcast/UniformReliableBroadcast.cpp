@@ -28,7 +28,7 @@ namespace da
                     da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable());
                     socket.send(data);
                 });
-            }
+            }   
         }
 
         da::sockets::Data UniformReliableBroadcast::receive(da::sockets::PerfectSocket socket)

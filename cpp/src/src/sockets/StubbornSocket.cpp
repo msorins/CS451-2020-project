@@ -17,7 +17,7 @@ namespace da
             while (true)
             {
                 FairLossSocket::send(data);
-                usleep(100000);
+                usleep(50000);
             }
         }
 

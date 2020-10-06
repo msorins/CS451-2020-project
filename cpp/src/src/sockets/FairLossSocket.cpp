@@ -28,6 +28,15 @@ namespace da
             this->socket_address.sin_family = AF_INET;
             this->socket_address.sin_addr.s_addr = inet_addr(ip.c_str());
             this->socket_address.sin_port = htons(port);
+            int optval = 1;
+            setsockopt(this->socket_file_descriptor, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+
+            auto i = bind(this->socket_file_descriptor, reinterpret_cast<struct sockaddr *>(&socket_address), sizeof(socket_address));
+            if (i == -1)
+            {
+                perror("cannot bind");
+                exit(-1);
+            }
         }
 
         void FairLossSocket::send(Data data)
@@ -42,12 +51,6 @@ namespace da
         Data FairLossSocket::receive()
         {
             std::cout << "receiving data on " << this->ip << ":" << std::to_string(this->port) << "\n";
-            auto i = bind(this->socket_file_descriptor, reinterpret_cast<struct sockaddr *>(&socket_address), sizeof(socket_address));
-            if (i == -1)
-            {
-                perror("cannot bind");
-                exit(-1);
-            }
 
             // receive the data
             socklen_t socket_addr_sizeof = sizeof(this->socket_address);
