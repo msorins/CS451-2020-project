@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 #include "../sockets/Data.h"
+#include "../sockets/PerfectSocket.h"
+#include "../threads/ThreadPool.h"
 #include "parser.hpp"
 
 #ifndef UNIFORM_RELIABLE_BROADCAST
@@ -29,7 +31,9 @@ namespace da
 
                 void broadcast(da::sockets::Data data);
 
-                void receive_loop();
+                da::sockets::Data receive(da::sockets::PerfectSocket socket);
+
+                void receive_loop(da::sockets::PerfectSocket socket);
 
                 void deliver(da::sockets::Data data);
 

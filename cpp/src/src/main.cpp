@@ -2,16 +2,18 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <fstream>
+#include <signal.h>
 
 #include "barrier.hpp"
 #include "parser.hpp"
-#include "hello.h"
-#include <signal.h>
 #include "sockets/FairLossSocket.h"
 #include "sockets/StubbornSocket.h"
+#include "sockets/PerfectSocket.h"
 #include "sockets/Data.h"
 #include "threads/ThreadPool.h"
 #include "broadcast/UniformReliableBroadcast.h"
+int getNrOfBroadcastMessages(std::string filePath);
 
 static void stop(int)
 {
@@ -29,6 +31,14 @@ static void stop(int)
   exit(0);
 }
 
+int getNrOfBroadcastMessages(std::string filePath)
+{
+  std::ifstream f(filePath);
+  int m = 0;
+  f >> m;
+  return m;
+}
+
 int main(int argc, char **argv)
 {
   signal(SIGTERM, stop);
@@ -40,9 +50,6 @@ int main(int argc, char **argv)
 
   Parser parser(argc, argv, requireConfig);
   parser.parse();
-
-  hello();
-  std::cout << std::endl;
 
   std::cout << "My PID: " << getpid() << "\n";
   std::cout << "Use `kill -SIGINT " << getpid() << "` or `kill -SIGTERM "
@@ -99,44 +106,36 @@ int main(int argc, char **argv)
 
   std::cout << "Doing some initialization...\n\n";
 
+  // START INIT
+  int m = getNrOfBroadcastMessages(std::string(parser.configPath()));
+  std::cout << "Nr of messages per process is: " << m << "\n";
+  da::broadcast::UniformReliableBroadcast urb(parser.hosts());
+  // END INIT
+
   Coordinator coordinator(parser.id(), barrier, signal);
   std::cout << "Waiting for all processes to finish initialization\n\n";
   coordinator.waitOnBarrier();
 
-  // V1 bootstrap code
-  // if (parser.id() == 1)
-  // {
-  //   std::cout << "port: " << hosts[1].portReadable() << " " << static_cast<int>(hosts[1].portReadable()) << "\n";
+  // START RECEIVING
+  std::cout << "Start receiving !! \n";
+  int currentHostIndex = -1;
+  for(int i = 0; i < static_cast<int>(hosts.size()); ++i) {
+    if(hosts[i].id == parser.id()) {
+      currentHostIndex = i;
+    }
+  }
+  auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()));
+  urb.receive_loop(selfSocket);
+  // END RECEIVING
 
-  //   da::threads::ThreadPool pool{4};
-  //   auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-
-  //   auto f1 = pool.enqueue([&]() noexcept {
-  //      socket.send(da::sockets::Data(1, 2, 99));
-  //   });
-
-  //   auto f2 = pool.enqueue([&]() noexcept {
-  //      socket.send(da::sockets::Data(1, 2, 101)); // data, to_pid
-  //   });
-  // }
-
-  // if (parser.id() == 2)
-  // {
-  //   auto socket = da::sockets::StubbornSocket(hosts[1].ipReadable(), static_cast<int>(hosts[1].portReadable()));
-  //   da::threads::ThreadPool pool{4};
-  //   auto f1 = pool.enqueue([&]() noexcept {
-  //      return socket.receive();
-  //   });
-  //   auto f1_result = f1.get();
-  //   std::cout << "finished receiving: " << f1_result << "\n";
-  // }
-
-  std::cout << "Broadcasting messages...\n\n";
-
-  // V2 bootstrap code
-  da::broadcast::UniformReliableBroadcast urb(parser.hosts());
-  da::sockets::Data data(1, 99);
-  urb.broadcast(data);
+  // START BROADCAST
+  std::cout << "Start broadcasting !! !! \n";
+  for (int i = 0; i < m; i++)
+  {
+    da::sockets::Data data(static_cast<int>(parser.id()), i);
+    urb.broadcast(data);
+  }
+  // END BROADCAST
 
   std::cout << "Signaling end of broadcasting messages\n\n";
   coordinator.finishedBroadcasting();

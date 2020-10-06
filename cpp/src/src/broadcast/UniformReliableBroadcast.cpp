@@ -15,19 +15,39 @@ namespace da
             this->pending.insert(data.getUniqueIdentifier());
 
             // Create a thread pool with enough threads for each host (as this is never ending)
-            da::threads::ThreadPool tp(this->hosts.size());
-            for (auto &host : this->hosts)
+            auto &tp = da::threads::ThreadPool::getInstance();
+            for (auto &host: this->hosts)
             {
+                // Skip sending to myself
+                if(static_cast<int>(host.id) == data.from_pid) {
+                    continue;
+                }
+
                 // Send the message in a thread pool
                 tp.enqueue([&]() noexcept {
-                     da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable());
+                    da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable());
                     socket.send(data);
                 });
             }
         }
 
-        void UniformReliableBroadcast::receive_loop()
+        da::sockets::Data UniformReliableBroadcast::receive(da::sockets::PerfectSocket socket)
         {
+            return socket.receive();
+        }
+
+        void UniformReliableBroadcast::receive_loop(da::sockets::PerfectSocket socket)
+        {
+            auto &tp = da::threads::ThreadPool::getInstance();
+            tp.enqueue([&]() noexcept {
+                while (true)
+                {
+                    std::cout << "-> do receive <- \n";
+                    da::sockets::Data data = this->receive(socket);
+                }
+            });
+
+            std::cout << "receive loop is done \n";
         }
 
         void UniformReliableBroadcast::deliver(da::sockets::Data data)
