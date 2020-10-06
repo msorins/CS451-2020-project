@@ -23,7 +23,6 @@ namespace da
                     continue;
                 }
 
-
                 // Send the message in a thread pool
                 tp.enqueue([data, &host]() noexcept {
                     da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
@@ -44,6 +43,17 @@ namespace da
                 while (true)
                 {
                     da::sockets::Data data = this->receive(socket);
+                    // Add packet to ack
+                    if(this->ack.find(data.getUniqueIdentifier())   == this->ack.end()) {
+                        this->ack[data.getUniqueIdentifier()] = 2; // 1 from the itself broadcast + 1 from the actual packet
+                    } else {
+                        this->ack[data.getUniqueIdentifier()] += 1;
+                    }
+
+                    // deliver if possible
+                    if(this->canDeliver(data)) {
+                        this->deliver(data);
+                    }
                 }
             });
 
@@ -52,11 +62,19 @@ namespace da
 
         void UniformReliableBroadcast::deliver(da::sockets::Data &data)
         {
+            std::cout << "urb deliver: " << data << "\n";
+            if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
+                this->pending.insert(data.getUniqueIdentifier());
+                this->broadcast(data);
+            }
         }
 
-        bool UniformReliableBroadcast::canDeliver(da::sockets::Data &m)
+        bool UniformReliableBroadcast::canDeliver(da::sockets::Data &data)
         {
-            return false;
+            if(this->ack.find(data.getUniqueIdentifier()) == this->ack.end()) {
+                return false;
+            }
+            return this->ack[data.getUniqueIdentifier()] >= static_cast<int>(this->hosts.size() / 2);
         }
     } // namespace broadcast
 } // namespace da

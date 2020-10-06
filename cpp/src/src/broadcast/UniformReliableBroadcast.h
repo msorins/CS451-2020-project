@@ -21,9 +21,8 @@ namespace da
             private:
                 std::vector<Parser::Host> hosts;
 
-                std::unordered_set<std::string> delivered;
-                std::unordered_set<std::string> pending;
-                std::unordered_set<std::string> ack;
+                std::unordered_set<std::string> pending; // package_unique_identifier: string
+                std::unordered_map<std::string, int> ack; // <package_unique_identifier:string ; count:integer:
                 std::unordered_map<std::string, const da::sockets::Data&> packets; // will contain all the packets
 
             public:
@@ -38,7 +37,7 @@ namespace da
 
                 void deliver(da::sockets::Data &data);
 
-                bool canDeliver(da::sockets::Data &m);
+                bool canDeliver(da::sockets::Data &data);
 
         };
     } // namespace broadcast
