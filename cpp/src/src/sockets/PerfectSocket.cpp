@@ -12,7 +12,7 @@ namespace da
     namespace sockets
     {
 
-        PerfectSocket::PerfectSocket(std::string ip, int port) : StubbornSocket(ip, port)
+        PerfectSocket::PerfectSocket(std::string ip, int port, SocketType socketType) : StubbornSocket(ip, port, socketType)
         {
         }
 
@@ -30,9 +30,11 @@ namespace da
                 {
                     // mark it as found
                     this->wasDelivered.insert(unique_packet_identifier);
+                    std::cout << "perfect link receiving <" << data << "> on " << this->ip << ":" << std::to_string(this->port) << "\n";
                     return data;
                 }
             }
+
         }
 
     } // namespace sockets

@@ -209,6 +209,6 @@ docker run -v ${PWD}/cpp:/cpp -it da:latest /bin/bash
 /root/finishedSignal.py -p 2
 
 # Run
-/cpp/bin/da_proc --id 1 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-1.txt --config /root/config.txt --config /root/
-/cpp/bin/da_proc --id 2 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-2.txt --config /root/config.txt --config /root/config.txt
+/cpp/bin/da_proc --id 1 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-1.txt /root/config.txt
+/cpp/bin/da_proc --id 2 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-2.txt /root/config.txt
 ```

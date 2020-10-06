@@ -5,6 +5,7 @@
 
 #include "Socket.h"
 #include "StubbornSocket.h"
+#include "SocketType.h"
 
 namespace da
 {
@@ -16,7 +17,7 @@ namespace da
             std::unordered_set<std::string> wasDelivered;
 
         public:
-            PerfectSocket(std::string ip, int port);
+            PerfectSocket(std::string ip, int port, SocketType socketType);
             Data receive();
         };
 

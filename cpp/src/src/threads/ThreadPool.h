@@ -12,6 +12,8 @@
 #include <thread>
 #include <future>
 
+#define NUM_THREADS 100
+
 namespace da
 {
     namespace threads
@@ -30,10 +32,16 @@ namespace da
             std::mutex _eventMutex;
             bool _stopping = false;
 
-        public:
             explicit ThreadPool(std::size_t numThreads)
             {
                 start(numThreads);
+            }
+
+        public:
+            static ThreadPool &getInstance()
+            {
+                static ThreadPool instance(NUM_THREADS);
+                return instance;
             }
 
             ~ThreadPool()

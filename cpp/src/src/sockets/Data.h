@@ -20,8 +20,11 @@ namespace da
             int to_pid;
             int data;
 
+            Data();
+            Data(int from_pid, int data);
             Data(int from_pid, int to_pid, int data);
             Data(int seq_number, int from_pid, int to_pid, int data);
+            Data(const Data &other);
 
             static int increaseSeqNumber();
 
