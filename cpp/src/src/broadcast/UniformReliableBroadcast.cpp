@@ -23,8 +23,9 @@ namespace da
                     continue;
                 }
 
+
                 // Send the message in a thread pool
-                tp.enqueue([&]() noexcept {
+                tp.enqueue([data, &host]() noexcept {
                     da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
                     socket.send(data);
                 });
@@ -42,7 +43,6 @@ namespace da
             tp.enqueue([&]() noexcept {
                 while (true)
                 {
-                    std::cout << "uniform reliable broadcast receive loop \n";
                     da::sockets::Data data = this->receive(socket);
                 }
             });

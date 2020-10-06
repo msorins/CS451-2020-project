@@ -41,7 +41,7 @@ namespace da
             }
         }
 
-        void FairLossSocket::send(Data &data)
+        void FairLossSocket::send(Data data)
         {
             // send the data
             int data_to_send[] = {data.seq_number, data.from_pid, data.to_pid, data.data};

@@ -23,6 +23,13 @@ namespace da
         {
         }
 
+        Data::Data(const Data &other) {
+            this->seq_number = other.seq_number;
+            this->from_pid = other.from_pid;
+            this->to_pid = other.to_pid;
+            this->data = other.data;
+        }
+
         int Data::increaseSeqNumber()
         {
             // Return increased seq number

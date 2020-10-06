@@ -29,7 +29,7 @@ namespace da
             FairLossSocket(std::string ip, int port, SocketType socketType);
 
             // Send String data over UDP channel
-            void send(Data &data);
+            void send(Data data);
 
             // Receive data over UDP channel
             // All the data will be received in format <lengthOfString: uint32_t> <string>
