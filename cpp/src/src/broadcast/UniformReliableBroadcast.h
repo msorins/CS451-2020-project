@@ -16,6 +16,8 @@ namespace da
         class UniformReliableBroadcast
         {
             private:
+                std::vector<Parser::Host> hosts;
+
                 std::unordered_set<std::string> delivered;
                 std::unordered_set<std::string> pending;
                 std::unordered_set<std::string> ack;
