@@ -56,7 +56,6 @@ int main(int argc, char **argv)
   std::cout << "List of resolved hosts is:\n";
   std::cout << "==========================\n";
   auto hosts = parser.hosts();
-
   for (auto &host : hosts)
   {
     std::cout << host.id << "\n";
