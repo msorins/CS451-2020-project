@@ -1,3 +1,5 @@
+// Inspired from: https://refactoring.guru/design-patterns/observer/cpp/example
+
 #include <iostream>
 #include <list>
 #include <string>
@@ -17,7 +19,7 @@ namespace da
         public:
             virtual ~Subject()
             {
-                std::cout << "Goodbye, I was the Subject.\n";
+
             }
 
             /**
@@ -41,7 +43,7 @@ namespace da
                 }
             }
 
-            void CreateMessage(std::string message = "Empty")
+            void CreateMessage(da::sockets::Data message)
             {
                 this->message_ = message;
                 Notify();
@@ -49,7 +51,7 @@ namespace da
 
         private:
             std::list<IObserver *> list_observer_;
-            std::string message_;
+            da::sockets::Data message_;
         };
 
     } // namespace tools
