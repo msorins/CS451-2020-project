@@ -146,6 +146,6 @@ int main(int argc, char **argv)
     std::this_thread::sleep_for(std::chrono::seconds(60));
   }
 
-  Subject *subject = new Subject;
+  da::tools::Subject *subject = new da::tools::Subject;
   return 0;
 }
