@@ -19,14 +19,13 @@ namespace da
     {
         class UniformReliableBroadcast
         {
-            private:
+            protected:
                 std::vector<Parser::Host> hosts;
                 da::tools::Logger &logger;
                 da::sockets::PerfectSocket &socket;
 
-                std::unordered_set<std::string> pending; // package_unique_identifier: string
+                std::unordered_map<std::string, da::sockets::Data*> pending; // package_unique_identifier: string
                 std::unordered_map<std::string, int> ack; // <package_unique_identifier:string ; count:integer:
-                std::unordered_map<std::string, const da::sockets::Data&> packets; // will contain all the packets
                 std::mutex mtx;
                 void receive(da::sockets::Data &data);
             public:
@@ -37,7 +36,7 @@ namespace da
 
                 void receive_loop();
 
-                void deliver(da::sockets::Data &data);
+                void deliver(da::sockets::Data &data, bool commitToLog = true);
 
                 bool canDeliver(da::sockets::Data &data);
 

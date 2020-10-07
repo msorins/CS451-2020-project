@@ -14,7 +14,7 @@
 #include "sockets/SocketType.h"
 #include "threads/ThreadPool.h"
 #include "tools/Logger.h"
-#include "broadcast/UniformReliableBroadcast.h"
+#include "broadcast/FifoReliableBroadcast.h"
 int getNrOfBroadcastMessages(std::string filePath);
 da::tools::Logger *logger;
 
@@ -130,8 +130,8 @@ int main(int argc, char **argv)
     }
   }
   auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()), da::sockets::SocketType::RECEIVE);
-  da::broadcast::UniformReliableBroadcast urb(parser.hosts(), *logger, selfSocket);
-  urb.receive_loop();
+  da::broadcast::FifoReliableBroadcast frb(parser.hosts(), *logger, selfSocket);
+  frb.receive_loop();
   // END RECEIVING
 
   // START BROADCAST
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
   {
       da::sockets::Data data(static_cast<int>(parser.id()), i + offset);
       std::cout << "Broadcasting: " << data << "\n";
-      urb.broadcast(data);
+      frb.broadcast(data);
   }
   // END BROADCAST
 

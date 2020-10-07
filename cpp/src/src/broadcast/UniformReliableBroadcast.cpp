@@ -12,7 +12,7 @@ namespace da
 
         void UniformReliableBroadcast::broadcast(da::sockets::Data &data)
         {
-            this->pending.insert(data.getUniqueIdentifier());
+            this->pending[data.getUniqueIdentifier()] = &data;
 
             // Create a thread pool with enough threads for each host (as this is never ending)
             auto &tp = da::threads::ThreadPool::getInstance();
@@ -61,12 +61,14 @@ namespace da
             std::cout << "receive loop is done \n";
         }
 
-        void UniformReliableBroadcast::deliver(da::sockets::Data &data)
+        void UniformReliableBroadcast::deliver(da::sockets::Data &data, bool commitToLog)
         {
-            std::string logMsg = "d " + std::to_string(data.seq_number) + " " + std::to_string(data.from_pid) + "\n";
-            this->logger.write(logMsg);
+            if(commitToLog) {
+              std::string logMsg = "d " + std::to_string(data.seq_number) + " " + std::to_string(data.from_pid) + "\n";
+              this->logger.write(logMsg);
+            }
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
-                this->pending.insert(data.getUniqueIdentifier());
+                this->pending[data.getUniqueIdentifier()] = &data;
                 this->broadcast(data);
             }
         }
