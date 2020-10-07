@@ -18,9 +18,7 @@ namespace da
             auto &tp = da::threads::ThreadPool::getInstance();
             for (const auto &host: this->hosts)
             {
-                std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
                 std::cout << "b " << " " << data  << ":" << host.portReadable() << "\n";
-                this->logger.write(logMsg);
 
                 // Send the message in a thread pool
                 tp.enqueue([data, &host]() noexcept {
@@ -64,7 +62,7 @@ namespace da
         void UniformReliableBroadcast::deliver(da::sockets::Data &data, bool commitToLog)
         {
             if(commitToLog) {
-              std::string logMsg = "d " + std::to_string(data.seq_number) + " " + std::to_string(data.from_pid) + "\n";
+              std::string logMsg = "d " + std::to_string(data.from_pid) + " " + std::to_string(data.seq_number) + "\n";
               this->logger.write(logMsg);
             }
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {

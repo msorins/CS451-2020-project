@@ -141,12 +141,15 @@ int main(int argc, char **argv)
   {
       da::sockets::Data data(static_cast<int>(parser.id()), i + offset);
       std::cout << "Broadcasting: " << data << "\n";
+      std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
+      logger->write(logMsg);
       frb.broadcast(data);
   }
-  // END BROADCAST
 
+  // END BROADCAST
+  std::this_thread::sleep_for(std::chrono::seconds(20));
   std::cout << "Signaling end of broadcasting messages\n\n";
-  // coordinator.finishedBroadcasting();
+  coordinator.finishedBroadcasting();
 
   while (true)
   {
