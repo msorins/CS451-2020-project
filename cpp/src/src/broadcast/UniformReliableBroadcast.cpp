@@ -12,15 +12,13 @@ namespace da
 
         void UniformReliableBroadcast::broadcast(da::sockets::Data &data)
         {
-            this->pending.insert(data.getUniqueIdentifier());
+            this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
 
             // Create a thread pool with enough threads for each host (as this is never ending)
             auto &tp = da::threads::ThreadPool::getInstance();
             for (const auto &host: this->hosts)
             {
-                std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
                 std::cout << "b " << " " << data  << ":" << host.portReadable() << "\n";
-                this->logger.write(logMsg);
 
                 // Send the message in a thread pool
                 tp.enqueue([data, &host]() noexcept {
@@ -42,7 +40,7 @@ namespace da
 
             // deliver if possible
             if(this->canDeliver(data)) {
-                this->deliver(data);
+                this->deliver(data, true);
             }
             this->mtx.unlock();
         }
@@ -61,12 +59,14 @@ namespace da
             std::cout << "receive loop is done \n";
         }
 
-        void UniformReliableBroadcast::deliver(da::sockets::Data &data)
+        void UniformReliableBroadcast::deliver(da::sockets::Data &data, bool commitToLog)
         {
-            std::string logMsg = "d " + std::to_string(data.seq_number) + " " + std::to_string(data.from_pid) + "\n";
-            this->logger.write(logMsg);
+            if(commitToLog) {
+              std::string logMsg = "d " + std::to_string(data.from_pid) + " " + std::to_string(data.seq_number) + "\n";
+              this->logger.write(logMsg);
+            }
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
-                this->pending.insert(data.getUniqueIdentifier());
+                this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
                 this->broadcast(data);
             }
         }

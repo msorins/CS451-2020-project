@@ -30,7 +30,6 @@ namespace da
 
             std::condition_variable _event;
             std::mutex _eventMutex;
-            int count = 0;
             bool _stopping = false;
 
             explicit ThreadPool(std::size_t numThreads)
@@ -56,8 +55,6 @@ namespace da
             template <class T>
             auto enqueue(T task) -> std::future<decltype(task())>
             {
-                this->count += 1;
-                std:: cout << "enquing: " << this-> count << " out of " << this->_threads.size() << "\n";
                 auto wrapper = std::make_shared<std::packaged_task<decltype(task())()>>(std::move(task));
 
                 {
