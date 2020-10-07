@@ -115,7 +115,6 @@ int main(int argc, char **argv)
   int m = getNrOfBroadcastMessages(std::string(parser.configPath()));
   std::cout << "Nr of messages per process is: " << m << "\n";
   logger = new da::tools::Logger(parser.outputPath());
-  da::broadcast::UniformReliableBroadcast urb(parser.hosts(), *logger);
   // END INIT
 
   Coordinator coordinator(parser.id(), barrier, signal);
@@ -131,15 +130,18 @@ int main(int argc, char **argv)
     }
   }
   auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()), da::sockets::SocketType::RECEIVE);
-  urb.receive_loop(selfSocket);
+  da::broadcast::UniformReliableBroadcast urb(parser.hosts(), *logger, selfSocket);
+  urb.receive_loop();
   // END RECEIVING
 
   // START BROADCAST
-  std::cout << "Start broadcasting !! !! \n";
+  std::cout << "Start broadcasting !! \n";
+  int offset = static_cast<int>(parser.id()) * 10000;
   for (int i = 0; i < m; i++)
   {
-    da::sockets::Data data(static_cast<int>(parser.id()), i);
-    urb.broadcast(data);
+      da::sockets::Data data(static_cast<int>(parser.id()), i + offset);
+      std::cout << "Broadcasting: " << data << "\n";
+      urb.broadcast(data);
   }
   // END BROADCAST
 

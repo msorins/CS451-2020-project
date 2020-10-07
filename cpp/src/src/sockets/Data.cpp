@@ -37,7 +37,7 @@ namespace da
         }
 
         std::string Data::getUniqueIdentifier() {
-            return std::to_string(this->from_pid) + ":" + std::to_string(this->seq_number);
+            return std::to_string(this->from_pid) + ":" + std::to_string(this->data);
         }
 
         std::ostream &operator<<(std::ostream &os, const Data &data)

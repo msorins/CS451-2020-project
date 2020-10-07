@@ -6,7 +6,7 @@ namespace da
 {
     namespace broadcast
     {
-        UniformReliableBroadcast::UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger) : hosts{hosts}, logger{logger}
+        UniformReliableBroadcast::UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket) : hosts{hosts}, logger{logger}, socket{socket}
         {
         }
 
@@ -19,11 +19,12 @@ namespace da
             for (const auto &host: this->hosts)
             {
                 std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
+                std::cout << logMsg << " " << data  << ":" << host.portReadable() << "\n";
                 this->logger.write(logMsg);
 
-                // Skip sending to myself
+                // Check if we are doing a send to the same host
                 if(static_cast<int>(host.id) == data.from_pid) {
-                    continue;
+//                    continue;
                 }
 
                 // Send the message in a thread pool
@@ -34,29 +35,29 @@ namespace da
             }
         }
 
-        da::sockets::Data UniformReliableBroadcast::receive(da::sockets::PerfectSocket &socket)
+        void UniformReliableBroadcast::receive(da::sockets::Data &data)
         {
-            return socket.receive();
+            // Add packet to ack
+            if(this->ack.find(data.getUniqueIdentifier())   == this->ack.end()) {
+                this->ack[data.getUniqueIdentifier()] = 1; // 1 from the actual packet
+            } else {
+                this->ack[data.getUniqueIdentifier()] += 1;
+            }
+
+            // deliver if possible
+            if(this->canDeliver(data)) {
+                this->deliver(data);
+            }
         }
 
-        void UniformReliableBroadcast::receive_loop(da::sockets::PerfectSocket &socket)
+        void UniformReliableBroadcast::receive_loop()
         {
             auto &tp = da::threads::ThreadPool::getInstance();
             tp.enqueue([&]() noexcept {
                 while (true)
                 {
-                    da::sockets::Data data = this->receive(socket);
-                    // Add packet to ack
-                    if(this->ack.find(data.getUniqueIdentifier())   == this->ack.end()) {
-                        this->ack[data.getUniqueIdentifier()] = 2; // 1 from the itself broadcast + 1 from the actual packet
-                    } else {
-                        this->ack[data.getUniqueIdentifier()] += 1;
-                    }
-
-                    // deliver if possible
-                    if(this->canDeliver(data)) {
-                        this->deliver(data);
-                    }
+                    da::sockets::Data data = this->socket.receive();
+                    this->receive(data);
                 }
             });
 

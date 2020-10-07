@@ -22,20 +22,20 @@ namespace da
             private:
                 std::vector<Parser::Host> hosts;
                 da::tools::Logger &logger;
+                da::sockets::PerfectSocket &socket;
 
                 std::unordered_set<std::string> pending; // package_unique_identifier: string
                 std::unordered_map<std::string, int> ack; // <package_unique_identifier:string ; count:integer:
                 std::unordered_map<std::string, const da::sockets::Data&> packets; // will contain all the packets
 
+                void receive(da::sockets::Data &data);
             public:
 
-                UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger);
+                UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
 
                 void broadcast(da::sockets::Data &data);
 
-                da::sockets::Data receive(da::sockets::PerfectSocket &socket);
-
-                void receive_loop(da::sockets::PerfectSocket &socket);
+                void receive_loop();
 
                 void deliver(da::sockets::Data &data);
 
