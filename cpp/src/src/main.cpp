@@ -116,9 +116,9 @@ int main(int argc, char **argv)
   std::cout << "Nr of messages per process is: " << m << "\n";
   logger = new da::tools::Logger(parser.outputPath());
   // END INIT
-
   Coordinator coordinator(parser.id(), barrier, signal);
   std::cout << "Waiting for all processes to finish initialization\n\n";
+  auto &tp = da::threads::ThreadPool::getInstance(static_cast<int>(parser.hosts().size()) * m * 5);
   coordinator.waitOnBarrier();
 
   // START RECEIVING
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
   // END BROADCAST
 
   std::cout << "Signaling end of broadcasting messages\n\n";
-  coordinator.finishedBroadcasting();
+  // coordinator.finishedBroadcasting();
 
   while (true)
   {

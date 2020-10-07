@@ -12,7 +12,7 @@
 #include <thread>
 #include <future>
 
-#define NUM_THREADS 4000
+#define MAX_NUM_THREADS 4500
 
 namespace da
 {
@@ -30,6 +30,7 @@ namespace da
 
             std::condition_variable _event;
             std::mutex _eventMutex;
+            int count = 0;
             bool _stopping = false;
 
             explicit ThreadPool(std::size_t numThreads)
@@ -38,9 +39,9 @@ namespace da
             }
 
         public:
-            static ThreadPool &getInstance()
+            static ThreadPool &getInstance(int numThreads = MAX_NUM_THREADS)
             {
-                static ThreadPool instance(NUM_THREADS);
+                static ThreadPool instance(std::min(numThreads, MAX_NUM_THREADS)) ;
                 return instance;
             }
 
@@ -55,6 +56,8 @@ namespace da
             template <class T>
             auto enqueue(T task) -> std::future<decltype(task())>
             {
+                this->count += 1;
+                std:: cout << "enquing: " << this-> count << " out of " << this->_threads.size() << "\n";
                 auto wrapper = std::make_shared<std::packaged_task<decltype(task())()>>(std::move(task));
 
                 {
