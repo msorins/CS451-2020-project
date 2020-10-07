@@ -36,7 +36,7 @@ namespace da
 
                 void receive_loop();
 
-                void deliver(da::sockets::Data &data, bool commitToLog = true);
+                virtual void deliver(da::sockets::Data &data, bool commitToLog);
 
                 bool canDeliver(da::sockets::Data &data);
 

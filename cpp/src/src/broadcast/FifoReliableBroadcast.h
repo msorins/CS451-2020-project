@@ -17,7 +17,7 @@ namespace da {
   public:
       FifoReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
 
-      void deliver(da::sockets::Data &data, bool commitToLog = true);
+      virtual void deliver(da::sockets::Data &data, bool commitToLog = true);
   };
 
 

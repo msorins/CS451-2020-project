@@ -12,7 +12,7 @@ namespace da
 
         void UniformReliableBroadcast::broadcast(da::sockets::Data &data)
         {
-            this->pending[data.getUniqueIdentifier()] = &data;
+            this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
 
             // Create a thread pool with enough threads for each host (as this is never ending)
             auto &tp = da::threads::ThreadPool::getInstance();
@@ -42,7 +42,7 @@ namespace da
 
             // deliver if possible
             if(this->canDeliver(data)) {
-                this->deliver(data);
+                this->deliver(data, true);
             }
             this->mtx.unlock();
         }
@@ -68,7 +68,7 @@ namespace da
               this->logger.write(logMsg);
             }
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
-                this->pending[data.getUniqueIdentifier()] = &data;
+                this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
                 this->broadcast(data);
             }
         }
