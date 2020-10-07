@@ -12,7 +12,7 @@
 #include <thread>
 #include <future>
 
-#define NUM_THREADS 100
+#define NUM_THREADS 4000
 
 namespace da
 {

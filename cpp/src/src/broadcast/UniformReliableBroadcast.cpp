@@ -19,13 +19,8 @@ namespace da
             for (const auto &host: this->hosts)
             {
                 std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
-                std::cout << logMsg << " " << data  << ":" << host.portReadable() << "\n";
+                std::cout << "b " << " " << data  << ":" << host.portReadable() << "\n";
                 this->logger.write(logMsg);
-
-                // Check if we are doing a send to the same host
-                if(static_cast<int>(host.id) == data.from_pid) {
-//                    continue;
-                }
 
                 // Send the message in a thread pool
                 tp.enqueue([data, &host]() noexcept {
@@ -37,6 +32,7 @@ namespace da
 
         void UniformReliableBroadcast::receive(da::sockets::Data &data)
         {
+            this->mtx.lock();
             // Add packet to ack
             if(this->ack.find(data.getUniqueIdentifier())   == this->ack.end()) {
                 this->ack[data.getUniqueIdentifier()] = 1; // 1 from the actual packet
@@ -48,6 +44,7 @@ namespace da
             if(this->canDeliver(data)) {
                 this->deliver(data);
             }
+            this->mtx.unlock();
         }
 
         void UniformReliableBroadcast::receive_loop()

@@ -9,7 +9,7 @@
 #include "../sockets/SocketType.h"
 #include "../tools/Logger.h"
 #include "parser.hpp"
-
+#include <mutex>
 #ifndef UNIFORM_RELIABLE_BROADCAST
 #define UNIFORM_RELIABLE_BROADCAST
 
@@ -27,7 +27,7 @@ namespace da
                 std::unordered_set<std::string> pending; // package_unique_identifier: string
                 std::unordered_map<std::string, int> ack; // <package_unique_identifier:string ; count:integer:
                 std::unordered_map<std::string, const da::sockets::Data&> packets; // will contain all the packets
-
+                std::mutex mtx;
                 void receive(da::sockets::Data &data);
             public:
 

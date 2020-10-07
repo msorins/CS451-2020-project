@@ -19,8 +19,10 @@ namespace da::tools {
     }
 
     void Logger::write(const std::string& str) {
-        this->fileHandler << str;
-        this->fileHandler.flush();
+      mtx.lock();
+      this->fileHandler << str;
+      this->fileHandler.flush();
+      mtx.unlock();
     }
 
 }

@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <mutex>
 #ifndef SRC_LOGGER_H
 #define SRC_LOGGER_H
 
@@ -9,6 +10,7 @@ namespace da::tools {
     private:
         std::string filePath;
         std::ofstream fileHandler;
+        std::mutex mtx;
 
     public:
         Logger(std::string filePath);
