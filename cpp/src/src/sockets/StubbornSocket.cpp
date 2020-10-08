@@ -1,6 +1,7 @@
 #include "Socket.h"
 #include "FairLossSocket.h"
 #include "StubbornSocket.h"
+#include "../tools/AppStatus.h"
 #include <iostream>
 #include <unistd.h>
 namespace da
@@ -19,6 +20,11 @@ namespace da
 
             while (true)
             {
+                // Force exit
+                if(da::tools::AppStatus::isRunning == false) {
+                  break;
+                }
+
                 FairLossSocket::send(data);
                 usleep(200000);
                 tries += 1;

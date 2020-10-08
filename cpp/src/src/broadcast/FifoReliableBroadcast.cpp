@@ -31,8 +31,7 @@ namespace da {
 
             // commit the delivery
             if(commitToLog) {
-              std::string logMsg = "d " + std::to_string(data.from_pid) + " " + std::to_string(packetData.seq_number) + "\n";
-              this->logger.write(logMsg);
+              this->logger.writeDeliver(data.from_pid, packetData.seq_number);
             }
 
             // erase from pending

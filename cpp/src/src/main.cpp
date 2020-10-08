@@ -15,6 +15,8 @@
 #include "threads/ThreadPool.h"
 #include "tools/Logger.h"
 #include "broadcast/FifoReliableBroadcast.h"
+#include "tools/AppStatus.h"
+
 int getNrOfBroadcastMessages(std::string filePath);
 da::tools::Logger *logger;
 
@@ -26,10 +28,9 @@ static void stop(int)
 
   // immediately stop network packet processing
   std::cout << "Immediately stopping network packet processing.\n";
-  // !!! To Do !!!
+  da::tools::AppStatus::isRunning = false;
 
   // write/flush output file if necessary
-  std::cout << "Writing output.\n";
   logger->closeFile();
 
   // exit directly from signal handler
@@ -140,9 +141,7 @@ int main(int argc, char **argv)
   for (int i = 0; i < m; i++)
   {
       da::sockets::Data data(static_cast<int>(parser.id()), i + offset);
-      std::cout << "Broadcasting: " << data << "\n";
-      std::string logMsg = "b " + std::to_string(data.seq_number) + "\n";
-      logger->write(logMsg);
+      logger->writeBroadcast(data.seq_number);
       frb.broadcast(data);
   }
 

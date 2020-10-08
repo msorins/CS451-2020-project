@@ -16,7 +16,8 @@ namespace da::tools {
         Logger(std::string filePath);
         ~Logger();
 
-        void write(const std::string& str);
+        void writeBroadcast(int seq_nr);
+        void writeDeliver(int from_pid, int seq_nr);
         void closeFile();
     };
 }

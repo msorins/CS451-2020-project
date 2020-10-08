@@ -1,6 +1,7 @@
 #include "UniformReliableBroadcast.h"
 #include "../sockets/PerfectSocket.h"
 #include "../threads/ThreadPool.h"
+#include "../tools/AppStatus.h"
 
 namespace da
 {
@@ -18,8 +19,6 @@ namespace da
             auto &tp = da::threads::ThreadPool::getInstance();
             for (const auto &host: this->hosts)
             {
-                std::cout << "b " << " " << data  << ":" << host.portReadable() << "\n";
-
                 // Send the message in a thread pool
                 tp.enqueue([data, &host]() noexcept {
                     da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
@@ -51,6 +50,11 @@ namespace da
             tp.enqueue([&]() noexcept {
                 while (true)
                 {
+                    // force exit condition
+                    if(da::tools::AppStatus::isRunning == false) {
+                      break;
+                    }
+
                     da::sockets::Data data = this->socket.receive();
                     this->receive(data);
                 }
@@ -62,8 +66,7 @@ namespace da
         void UniformReliableBroadcast::deliver(da::sockets::Data &data, bool commitToLog)
         {
             if(commitToLog) {
-              std::string logMsg = "d " + std::to_string(data.from_pid) + " " + std::to_string(data.seq_number) + "\n";
-              this->logger.write(logMsg);
+              this->logger.writeDeliver(data.from_pid, data.seq_number);
             }
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
                 this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
