@@ -145,8 +145,18 @@ int main(int argc, char **argv)
       frb.broadcast(data);
   }
 
+  // Keep broadcasting until we hit the desired nr of delivered messages
+  while (true)
+  {
+    if(logger->getNrOfDelivers() >= static_cast<int>(parser.hosts().size()) * m) {
+      da::tools::AppStatus::isRunning = false;
+      break;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
+  logger->closeFile();
+
   // END BROADCAST
-  std::this_thread::sleep_for(std::chrono::seconds(20));
   std::cout << "Signaling end of broadcasting messages\n\n";
   coordinator.finishedBroadcasting();
 

@@ -7,6 +7,7 @@ namespace da::tools {
     Logger::Logger(std::string filePath): filePath{filePath} {
         std::cout << "opening log file: " << filePath << "\n";
         this->fileHandler.open(filePath);
+        this->nrOfDelivers = 0;
     }
 
     Logger::~Logger() {
@@ -22,14 +23,22 @@ namespace da::tools {
     void Logger::writeBroadcast(int seq_nr) {
       mtx.lock();
       std::string logMsg = "b " + std::to_string(seq_nr) + "\n";
+      std::cout << logMsg;
       this->fileHandler << logMsg;
       mtx.unlock();
     }
 
     void Logger::writeDeliver(int from_pid, int seq_nr) {
+      this->nrOfDelivers += 1;
+
       mtx.lock();
-      std::string logMsg = "d " + std::to_string(from_pid) + " " + std::to_string(seq_nr);
+      std::string logMsg = "d " + std::to_string(from_pid) + " " + std::to_string(seq_nr) + "\n";
+      std::cout << logMsg;
       this->fileHandler << logMsg;
       mtx.unlock();
+    }
+
+    int Logger::getNrOfDelivers() {
+      return this->nrOfDelivers;
     }
 }
