@@ -17,6 +17,8 @@ namespace da
 
             // Send data
             void send(Data data);
+
+            virtual void deliver(Data &data);
         };
 
     } // namespace sockets

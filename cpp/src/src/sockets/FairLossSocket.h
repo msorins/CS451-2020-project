@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <string>
+#include <mutex>
 #ifndef FAIR_LOSS_SOCKET
 #define FAIR_LOSS_SOCKET
 
@@ -34,6 +35,8 @@ namespace da
             // Receive data over UDP channel
             // All the data will be received in format <lengthOfString: uint32_t> <string>
             Data receive();
+
+            virtual void deliver(Data &data);
         };
 
     } // namespace sockets

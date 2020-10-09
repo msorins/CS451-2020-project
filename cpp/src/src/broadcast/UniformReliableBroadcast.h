@@ -17,7 +17,7 @@ namespace da
 {
     namespace broadcast
     {
-        class UniformReliableBroadcast
+      class UniformReliableBroadcast
         {
             protected:
                 std::vector<Parser::Host> hosts;
@@ -38,7 +38,7 @@ namespace da
 
                 virtual void deliver(da::sockets::Data &data, bool commitToLog);
 
-                bool canDeliver(da::sockets::Data &data);
+                virtual bool canDeliver(da::sockets::Data &data);
 
         };
     } // namespace broadcast

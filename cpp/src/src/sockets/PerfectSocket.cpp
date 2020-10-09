@@ -34,13 +34,18 @@ namespace da
                 // If the data was not found
                 if (this->wasDelivered.find(unique_packet_identifier) == this->wasDelivered.end())
                 {
-                    // mark it as found
-                    this->wasDelivered.insert(unique_packet_identifier);
-//                    std::cout << "perfect link receiving <" << data << "> on " << this->ip << ":" << std::to_string(this->port) << "\n";
-                    return data;
+                  // return
+                  return data;
                 }
             }
+        }
 
+
+        void PerfectSocket::deliver(Data &data) {
+          StubbornSocket::deliver(data);
+
+          auto unique_packet_identifier = data.getUniqueIdentifier();
+          this->wasDelivered.insert(unique_packet_identifier);
         }
 
     } // namespace sockets

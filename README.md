@@ -211,6 +211,10 @@ docker run -v ${PWD}/cpp:/cpp -it da:latest /bin/bash
 # Run
 /cpp/bin/da_proc --id 1 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-1.txt /root/config.txt
 /cpp/bin/da_proc --id 2 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-2.txt /root/config.txt
-/cpp/bin/da_proc --id 3 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-2.txt /root/config.txt
-/cpp/bin/da_proc --id 4 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-2.txt /root/config.txt
+/cpp/bin/da_proc --id 3 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-3.txt /root/config.txt
+/cpp/bin/da_proc --id 4 --hosts /root/hosts.txt --barrier 0.0.0.0:10000 --signal 0.0.0.0:11000 --output /root/logs-4.txt /root/config.txt
+
+# Validate
+/cpp/validate.py -r /cpp/run.sh -b fifo -l /cpp -p 2 -m 10
 ```
+

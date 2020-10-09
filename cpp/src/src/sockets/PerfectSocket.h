@@ -19,6 +19,7 @@ namespace da
         public:
             PerfectSocket(std::string ip, int port, SocketType socketType);
             Data receive();
+            virtual void deliver(Data &data);
         };
 
     } // namespace sockets

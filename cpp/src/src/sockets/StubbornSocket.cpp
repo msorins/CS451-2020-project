@@ -15,9 +15,6 @@ namespace da
 
         void StubbornSocket::send(Data data)
         {
-            int max_tries = 100;
-            int tries = 0;
-
             while (true)
             {
                 // Force exit
@@ -27,11 +24,11 @@ namespace da
 
                 FairLossSocket::send(data);
                 usleep(200000);
-                tries += 1;
-                if(tries >= max_tries) {
-                  return;
-                }
             }
+        }
+
+        void StubbornSocket::deliver(Data &data) {
+          FairLossSocket::deliver(data);
         }
 
     } // namespace sockets

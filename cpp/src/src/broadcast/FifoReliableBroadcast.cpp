@@ -19,14 +19,20 @@ namespace da {
       UniformReliableBroadcast::deliver(data, false);
 
       bool shouldExit = false;
-      while(shouldExit == false) {
+      while(!shouldExit) {
         shouldExit = true;
 
+        std::cout << "frb processing: " << data << ": ";
+        for(int i = 1; i <= static_cast<int>(this->hosts.size()); ++i ) {
+          std::cout << next[i] << " ";
+        }
+        std::cout << "\n";
         for(auto packet: this->pending) {
           auto packetData = *packet.second;
+          std::cout<<"( " << packetData << ") ";
 
           // actually deliver the package
-          if(next[data.from_pid] == packetData.seq_number) {
+          if(next[data.from_pid] == packetData.seq_number && packetData.from_pid == data.from_pid) {
             next[data.from_pid] += 1;
 
             // commit the delivery
@@ -40,7 +46,9 @@ namespace da {
             break;
           }
         }
+        std::cout<<"\n\n";
       }
+
     }
   }
 }
