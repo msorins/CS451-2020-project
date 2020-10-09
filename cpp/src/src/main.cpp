@@ -13,6 +13,7 @@
 #include "sockets/Data.h"
 #include "sockets/SocketType.h"
 #include "threads/ThreadPool.h"
+#include "threads/InfiniteThreadPool.h"
 #include "tools/Logger.h"
 #include "broadcast/FifoReliableBroadcast.h"
 #include "tools/AppStatus.h"
@@ -119,7 +120,7 @@ int main(int argc, char **argv)
   // END INIT
   Coordinator coordinator(parser.id(), barrier, signal);
   std::cout << "Waiting for all processes to finish initialization\n\n";
-  auto &tp = da::threads::ThreadPool::getInstance(static_cast<int>(parser.hosts().size()) * m * 5);
+  auto &tp = da::threads::InfiniteThreadPool::getInstance();
   coordinator.waitOnBarrier();
 
   // START RECEIVING
@@ -148,12 +149,16 @@ int main(int argc, char **argv)
   // Keep broadcasting until we hit the desired nr of delivered messages
   while (true)
   {
+    std::cout << "Nr of delivered items: " << logger->getNrOfDelivers() << "\n";
     if(logger->getNrOfDelivers() >= static_cast<int>(parser.hosts().size()) * m) {
+      std::cout << "App state set to isRunning false" << "\n";
       da::tools::AppStatus::isRunning = false;
       break;
     }
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
+
+  // Close File
   logger->closeFile();
 
   // END BROADCAST

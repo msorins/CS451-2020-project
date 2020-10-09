@@ -1,8 +1,8 @@
 #include "UniformReliableBroadcast.h"
 #include "../sockets/PerfectSocket.h"
-#include "../threads/ThreadPool.h"
+#include "../threads/InfiniteThreadPool.h"
 #include "../tools/AppStatus.h"
-
+#include <thread>
 namespace da
 {
     namespace broadcast
@@ -16,14 +16,16 @@ namespace da
             this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
 
             // Create a thread pool with enough threads for each host (as this is never ending)
-            auto &tp = da::threads::ThreadPool::getInstance();
+            auto &tp = da::threads::InfiniteThreadPool::getInstance();
             for (const auto &host: this->hosts)
             {
                 // Send the message in a thread pool
-                tp.enqueue([data, &host]() noexcept {
+                std::thread t1([data, &host] {
                     da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
                     socket.send(data);
                 });
+
+                tp.push_back(t1);
             }
         }
 
@@ -46,8 +48,8 @@ namespace da
 
         void UniformReliableBroadcast::receive_loop()
         {
-            auto &tp = da::threads::ThreadPool::getInstance();
-            tp.enqueue([&]() noexcept {
+            auto &tp = da::threads::InfiniteThreadPool::getInstance();
+            std:: thread t1([&]() noexcept {
                 while (true)
                 {
                     // force exit condition
@@ -59,6 +61,7 @@ namespace da
                     this->receive(data);
                 }
             });
+            tp.push_back(t1);
 
             std::cout << "receive loop is done \n";
         }
