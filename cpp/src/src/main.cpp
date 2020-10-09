@@ -159,11 +159,5 @@ int main(int argc, char **argv)
   // END BROADCAST
   std::cout << "Signaling end of broadcasting messages\n\n";
   coordinator.finishedBroadcasting();
-
-  while (true)
-  {
-    std::this_thread::sleep_for(std::chrono::seconds(60));
-  }
-
-  return 0;
+  exit(0);
 }
