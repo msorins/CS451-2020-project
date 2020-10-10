@@ -26,7 +26,8 @@ namespace da
 
                 std::unordered_map<std::string, da::sockets::Data*> pending; // package_unique_identifier: string
                 std::unordered_map<std::string, int> ack; // <package_unique_identifier:string ; count:integer:
-                std::mutex mtx;
+                std::mutex receive_mutex;
+                std::mutex add_to_brodcast_mutex;
                 void receive(da::sockets::Data &data);
             public:
 

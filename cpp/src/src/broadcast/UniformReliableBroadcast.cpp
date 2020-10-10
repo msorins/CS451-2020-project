@@ -13,6 +13,7 @@ namespace da
 
         void UniformReliableBroadcast::broadcast(da::sockets::Data &data)
         {
+            this->add_to_brodcast_mutex.lock();
             this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
 
             // Create a thread pool with enough threads for each host (as this is never ending)
@@ -20,13 +21,10 @@ namespace da
             for (const auto &host: this->hosts)
             {
                 // Send the message in a thread pool
-                std::thread t1([data, &host] {
-                    da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
-                    socket.send(data);
-                });
-
-                tp.push_back(t1);
+                da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
+                socket.send(data);
             }
+            this->add_to_brodcast_mutex.unlock();
         }
 
         void UniformReliableBroadcast::receive(da::sockets::Data &data)
@@ -50,7 +48,7 @@ namespace da
             std:: thread t1([&]() noexcept {
                 while (true)
                 {
-                    this->mtx.lock();
+                    this->receive_mutex.lock();
                     // force exit condition
                     if(da::tools::AppStatus::isRunning == false) {
                       break;
@@ -58,7 +56,7 @@ namespace da
 
                     da::sockets::Data data = this->socket.receive();
                     this->receive(data);
-                    this->mtx.unlock();
+                    this->receive_mutex.unlock();
                 }
             });
             tp.push_back(t1);

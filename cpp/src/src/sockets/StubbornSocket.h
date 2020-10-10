@@ -5,7 +5,8 @@
 #include "FairLossSocket.h"
 #include "SocketType.h"
 #include <unordered_set>
-
+#include <vector>
+#include <unordered_map>
 namespace da
 {
     namespace sockets
@@ -14,6 +15,7 @@ namespace da
         {
         public:
             StubbornSocket(std::string ip, int port, SocketType socketType);
+            static std::unordered_map<std::string, std::pair<FairLossSocket*, Data*> > toSend;
 
             // Send data
             void send(Data data);

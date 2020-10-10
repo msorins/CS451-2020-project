@@ -16,6 +16,8 @@ namespace da {
 
       void push_back(std::thread &thread);
 
+      int size();
+
       void join();
     };
   }

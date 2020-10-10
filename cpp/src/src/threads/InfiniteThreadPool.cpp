@@ -17,5 +17,9 @@ namespace da {
         thread.join();
       }
     }
+
+    int InfiniteThreadPool::size() {
+      return static_cast<int>(this->threads.size());
+    }
   }
 }

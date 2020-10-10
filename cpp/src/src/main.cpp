@@ -12,7 +12,7 @@
 #include "sockets/PerfectSocket.h"
 #include "sockets/Data.h"
 #include "sockets/SocketType.h"
-#include "threads/ThreadPool.h"
+#include "sockets/SendLoop.h"
 #include "threads/InfiniteThreadPool.h"
 #include "tools/Logger.h"
 #include "broadcast/FifoReliableBroadcast.h"
@@ -136,6 +136,10 @@ int main(int argc, char **argv)
   frb.receive_loop();
   // END RECEIVING
 
+  // START SEND LOOP
+  da::sockets::SendLoop sendLoop;
+  sendLoop.start_loop();
+
   // START BROADCAST
   std::cout << "Start broadcasting !! \n";
   int offset = static_cast<int>(parser.id()) * 10000;
@@ -145,17 +149,16 @@ int main(int argc, char **argv)
       logger->writeBroadcast(data.seq_number);
       frb.broadcast(data);
   }
-
   // Keep broadcasting until we hit the desired nr of delivered messages
   while (true)
   {
-    std::cout << "Nr of delivered items: " << logger->getNrOfDelivers() << "\n";
+    std::cout << "Nr of delivered items: " << logger->getNrOfDelivers() << "; Nr of threads: " << tp.size();
     if(logger->getNrOfDelivers() >= static_cast<int>(parser.hosts().size()) * m) {
       std::cout << "App state set to isRunning false" << "\n";
       da::tools::AppStatus::isRunning = false;
       break;
     }
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
   // Close File

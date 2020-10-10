@@ -61,7 +61,6 @@ namespace da
 
             // Put the data received into the appropiate structure
             Data formatted_data(data[0], data[1], data[2], data[3]);
-            std::cout << "fairLoss receive: " << formatted_data << "\n";
             return formatted_data;
         }
 
