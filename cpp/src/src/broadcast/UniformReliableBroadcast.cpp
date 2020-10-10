@@ -7,33 +7,46 @@ namespace da
 {
     namespace broadcast
     {
-        UniformReliableBroadcast::UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket) : hosts{hosts}, logger{logger}, socket{socket}
+        UniformReliableBroadcast::UniformReliableBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket) : current_pid{current_pid}, hosts{hosts}, logger{logger}, socket{socket}
         {
         }
 
         void UniformReliableBroadcast::broadcast(da::sockets::Data &data)
         {
+            // Run everything in a mutex
             this->add_to_brodcast_mutex.lock();
-            this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
 
-            // Create a thread pool with enough threads for each host (as this is never ending)
-            auto &tp = da::threads::InfiniteThreadPool::getInstance();
+            // Modify the data to have the from_pid as current pid
+            da::sockets::Data *newData = new da::sockets::Data(data);
+            newData->from_pid = this->current_pid;
+
+            // Add it to pending
+            this->pending[newData->getUniqueIdentifier()] = newData;
+
+            // Iterate through all hosts and send it
             for (const auto &host: this->hosts)
             {
                 // Send the message in a thread pool
                 da::sockets::PerfectSocket socket(host.ipReadable(), host.portReadable(), da::sockets::SocketType::SEND);
-                socket.send(data);
+                socket.send(*newData);
             }
+
+            // Close the Mutex
             this->add_to_brodcast_mutex.unlock();
         }
 
         void UniformReliableBroadcast::receive(da::sockets::Data &data)
         {
+            // Skip empty data
+            if(data.from_pid == -1) {
+              return;
+            }
+
             // Add packet to ack
-            if(this->ack.find(data.getUniqueIdentifier())   == this->ack.end()) {
-                this->ack[data.getUniqueIdentifier()] = 1; // 1 from the actual packet
+            if(this->ack.find(data.getMessageIdentifier())   == this->ack.end()) {
+                this->ack[data.getMessageIdentifier()] = 1; // 1 from the actual packet
             } else {
-                this->ack[data.getUniqueIdentifier()] += 1;
+                this->ack[data.getMessageIdentifier()] += 1;
             }
 
             // deliver if possible
@@ -66,6 +79,7 @@ namespace da
 
         void UniformReliableBroadcast::deliver(da::sockets::Data &data, bool commitToLog)
         {
+            std::cout << "urb deliver: " << data << " ";
             // Commit the delivery to log
             if(commitToLog) {
               this->logger.writeDeliver(data.from_pid, data.seq_number);
@@ -77,18 +91,27 @@ namespace da
             // Add to pending if doesn't exist and broadcast
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
                 this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
+                std::cout<< ", add to pending ";
                 this->broadcast(data);
             }
+            std::cout << "\n";
+
+            std::cout << "pending: ";
+            for(auto elem: this->pending) {
+              std::cout << elem.first << ", ";
+            }
+            std::cout << "\n";
         }
 
         bool UniformReliableBroadcast::canDeliver(da::sockets::Data &data)
         {
-            if(this->ack.find(data.getUniqueIdentifier()) == this->ack.end()) {
-                std::cout << "(0)" << "can deliver uid: " << data.getUniqueIdentifier() << ", data: " << data << ":: " << ack[data.getUniqueIdentifier()] << "\n";
+           std::cout << "("<< this->ack[data.getMessageIdentifier()] <<" out of "<< static_cast<int>(this->hosts.size() / 2) << ")" << "can deliver data: " << data.getMessageIdentifier() << ", data: " << data << ", ack " << ack[data.getMessageIdentifier()] << " ";
+            if(this->ack.find(data.getMessageIdentifier()) == this->ack.end()) {
+                std::cout << "false \n";
                 return false;
             }
-            std::cout << "("<< this->ack[data.getUniqueIdentifier()] <<" out of "<< static_cast<int>(this->hosts.size() / 2) << ")" << "can deliver uid: " << data.getUniqueIdentifier() << ", data: " << data << ":: " << ack[data.getUniqueIdentifier()] << "\n";
-            return this->ack[data.getUniqueIdentifier()] >= static_cast<int>(this->hosts.size() / 2);
+            std::cout << "\n";
+            return this->ack[data.getMessageIdentifier()] >= static_cast<int>(this->hosts.size() / 2);
         }
     } // namespace broadcast
 } // namespace da

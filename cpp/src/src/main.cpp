@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     }
   }
   auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()), da::sockets::SocketType::RECEIVE);
-  da::broadcast::FifoReliableBroadcast frb(parser.hosts(), *logger, selfSocket);
+  da::broadcast::FifoReliableBroadcast frb(static_cast<int>(parser.id()), parser.hosts(), *logger, selfSocket);
   frb.receive_loop();
   // END RECEIVING
 
@@ -142,10 +142,10 @@ int main(int argc, char **argv)
 
   // START BROADCAST
   std::cout << "Start broadcasting !! \n";
-  int offset = static_cast<int>(parser.id()) * 10000;
-  for (int i = 0; i < m; i++)
+  int offset = 1000;
+  for (int i = 1; i <= m; i++)
   {
-      da::sockets::Data data(static_cast<int>(parser.id()), i + offset);
+      da::sockets::Data data(static_cast<int>(parser.id()), offset * static_cast<int>(parser.id()) + i);
       logger->writeBroadcast(data.seq_number);
       frb.broadcast(data);
   }

@@ -44,7 +44,7 @@ namespace da
         void FairLossSocket::send(Data data)
         {
             // send the data
-            int data_to_send[] = {data.seq_number, data.from_pid, data.to_pid, data.data};
+            int data_to_send[] = {data.seq_number, data.original_from_pid, data.from_pid, data.to_pid, data.data};
             sendto(this->socket_file_descriptor, &data_to_send, sizeof(data_to_send), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), sizeof(this->socket_address));
         }
 
@@ -52,7 +52,7 @@ namespace da
         {
             // receive the data
             socklen_t socket_addr_sizeof = sizeof(this->socket_address);
-            int data[4];
+            int data[5];
             if (recvfrom(this->socket_file_descriptor, &data, sizeof(data), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0)
             {
                 perror("cannot receive 2");
@@ -60,7 +60,7 @@ namespace da
             }
 
             // Put the data received into the appropiate structure
-            Data formatted_data(data[0], data[1], data[2], data[3]);
+            Data formatted_data(data[0], data[1], data[2], data[3], data[4]);
             return formatted_data;
         }
 

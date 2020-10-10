@@ -16,6 +16,7 @@ namespace da
 
         public:
             int seq_number;
+            int original_from_pid;
             int from_pid;
             int to_pid;
             int data;
@@ -24,11 +25,13 @@ namespace da
             Data(int from_pid, int data);
             Data(int from_pid, int to_pid, int data);
             Data(int seq_number, int from_pid, int to_pid, int data);
+            Data(int seq_number, int original_from_pid, int from_pid, int to_pid, int data);
             Data(const Data &other);
 
             static int increaseSeqNumber();
 
             std::string getUniqueIdentifier();
+            std::string getMessageIdentifier();
 
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };

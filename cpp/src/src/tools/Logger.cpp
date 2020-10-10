@@ -25,6 +25,7 @@ namespace da::tools {
       std::string logMsg = "b " + std::to_string(seq_nr) + "\n";
       std::cout << logMsg;
       this->fileHandler << logMsg;
+      this->fileHandler.flush();
       mtx.unlock();
     }
 
@@ -35,6 +36,7 @@ namespace da::tools {
       std::string logMsg = "d " + std::to_string(from_pid) + " " + std::to_string(seq_nr) + "\n";
       std::cout << logMsg;
       this->fileHandler << logMsg;
+      this->fileHandler.flush();
       mtx.unlock();
     }
 

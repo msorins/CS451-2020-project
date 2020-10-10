@@ -15,7 +15,7 @@ namespace da {
       std::vector<int> next;
 
   public:
-      FifoReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
+      FifoReliableBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
 
       virtual void deliver(da::sockets::Data &data, bool commitToLog = true);
   };

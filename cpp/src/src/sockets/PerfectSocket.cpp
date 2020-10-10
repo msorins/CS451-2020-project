@@ -29,7 +29,7 @@ namespace da
 
                 // First Receive data from stubborn socket
                 auto data = StubbornSocket::receive();
-                auto unique_packet_identifier = data.getUniqueIdentifier();
+                auto unique_packet_identifier = data.getMessageIdentifier();
 
                 // If the data was not found
                 if (this->wasDelivered.find(unique_packet_identifier) == this->wasDelivered.end())
@@ -44,7 +44,7 @@ namespace da
         void PerfectSocket::deliver(Data &data) {
           StubbornSocket::deliver(data);
 
-          auto unique_packet_identifier = data.getUniqueIdentifier();
+          auto unique_packet_identifier = data.getMessageIdentifier();
           this->wasDelivered.insert(unique_packet_identifier);
         }
 

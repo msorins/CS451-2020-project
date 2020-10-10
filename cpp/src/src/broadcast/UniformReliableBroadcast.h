@@ -20,6 +20,7 @@ namespace da
       class UniformReliableBroadcast
         {
             protected:
+                int current_pid;
                 std::vector<Parser::Host> hosts;
                 da::tools::Logger &logger;
                 da::sockets::PerfectSocket &socket;
@@ -31,7 +32,7 @@ namespace da
                 void receive(da::sockets::Data &data);
             public:
 
-                UniformReliableBroadcast(std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
+                UniformReliableBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
 
                 void broadcast(da::sockets::Data &data);
 
