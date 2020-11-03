@@ -20,7 +20,7 @@ namespace da
             // A thread inifnitely sends the data
             da::sockets::Data *newData = new da::sockets::Data(data);
             if(StubbornSocket::toSend.find(std::to_string(this->port) + ":" + data.getMessageIdentifier()) == StubbornSocket::toSend.end()) {
-              std::cout<<"stubborn adding to send loop: " << data << " on port: " << this->port << "; copy: " << newData << "\n";
+              //std::cout<<"stubborn adding to send loop: " << data << " on port: " << this->port << "; copy: " << newData << "\n";
               StubbornSocket::toSend[std::to_string(this->port) + ":" + data.getMessageIdentifier()] = std::make_pair(new FairLossSocket(this->ip, this->port, this->socketType), newData);
             }
         }

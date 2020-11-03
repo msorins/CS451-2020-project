@@ -22,14 +22,14 @@ namespace da {
       while(!shouldExit) {
         shouldExit = true;
 
-        std::cout << "frb deliver: " << data << ": ";
+        //std::cout << "frb deliver: " << data << ": ";
         for(int i = 1; i <= static_cast<int>(this->hosts.size()); ++i ) {
-          std::cout << next[i] << " ";
+          //std::cout << next[i] << " ";
         }
-        std::cout << "\n";
+        //std::cout << "\n";
         for(auto packet: this->pending) {
           auto packetData = *packet.second;
-          std::cout<<"( " << packetData << ") ";
+          //std::cout<<"( " << packetData << ") ";
 
           // actually deliver the package
           if(next[data.original_from_pid] == packetData.seq_number && packetData.original_from_pid == data.original_from_pid) {
@@ -46,7 +46,7 @@ namespace da {
             break;
           }
         }
-        std::cout<<"\n\n";
+        //std::cout<<"\n\n";
       }
 
     }

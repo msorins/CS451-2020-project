@@ -28,7 +28,7 @@ static void stop(int)
   signal(SIGINT, SIG_DFL);
 
   // immediately stop network packet processing
-  std::cout << "Immediately stopping network packet processing.\n";
+  //std::cout << "Immediately stopping network packet processing.\n";
   da::tools::AppStatus::isRunning = false;
 
   // write/flush output file if necessary
@@ -58,73 +58,73 @@ int main(int argc, char **argv)
   Parser parser(argc, argv, requireConfig);
   parser.parse();
 
-  std::cout << "My PID: " << getpid() << "\n";
-  std::cout << "Use `kill -SIGINT " << getpid() << "` or `kill -SIGTERM "
-            << getpid() << "` to stop processing packets\n\n";
+  //std::cout << "My PID: " << getpid() << "\n";
+  //std::cout << "Use `kill -SIGINT " << getpid() << "` or `kill -SIGTERM "
+            // << getpid() << "` to stop processing packets\n\n";
 
-  std::cout << "My ID: " << parser.id() << "\n\n";
+  //std::cout << "My ID: " << parser.id() << "\n\n";
 
-  std::cout << "Path to hosts:\n";
-  std::cout << "==============\n";
-  std::cout << parser.hostsPath() << "\n\n";
+  //std::cout << "Path to hosts:\n";
+  //std::cout << "==============\n";
+  //std::cout << parser.hostsPath() << "\n\n";
 
-  std::cout << "List of resolved hosts is:\n";
-  std::cout << "==========================\n";
+  //std::cout << "List of resolved hosts is:\n";
+  //std::cout << "==========================\n";
   auto hosts = parser.hosts();
   for (auto &host : hosts)
   {
-    std::cout << host.id << "\n";
-    std::cout << "Human-readable IP: " << host.ipReadable() << "\n";
-    std::cout << "Machine-readable IP: " << host.ip << "\n";
-    std::cout << "Human-readbale Port: " << host.portReadable() << "\n";
-    std::cout << "Machine-readbale Port: " << host.port << "\n";
-    std::cout << "\n";
+    //std::cout << host.id << "\n";
+    //std::cout << "Human-readable IP: " << host.ipReadable() << "\n";
+    //std::cout << "Machine-readable IP: " << host.ip << "\n";
+    //std::cout << "Human-readbale Port: " << host.portReadable() << "\n";
+    //std::cout << "Machine-readbale Port: " << host.port << "\n";
+    //std::cout << "\n";
   }
-  std::cout << "\n";
+  //std::cout << "\n";
 
-  std::cout << "Barrier:\n";
-  std::cout << "========\n";
+  //std::cout << "Barrier:\n";
+  //std::cout << "========\n";
   auto barrier = parser.barrier();
-  std::cout << "Human-readable IP: " << barrier.ipReadable() << "\n";
-  std::cout << "Machine-readable IP: " << barrier.ip << "\n";
-  std::cout << "Human-readbale Port: " << barrier.portReadable() << "\n";
-  std::cout << "Machine-readbale Port: " << barrier.port << "\n";
-  std::cout << "\n";
+  //std::cout << "Human-readable IP: " << barrier.ipReadable() << "\n";
+  //std::cout << "Machine-readable IP: " << barrier.ip << "\n";
+  //std::cout << "Human-readbale Port: " << barrier.portReadable() << "\n";
+  //std::cout << "Machine-readbale Port: " << barrier.port << "\n";
+  //std::cout << "\n";
 
-  std::cout << "Signal:\n";
-  std::cout << "========\n";
+  //std::cout << "Signal:\n";
+  //std::cout << "========\n";
   auto signal = parser.signal();
-  std::cout << "Human-readable IP: " << signal.ipReadable() << "\n";
-  std::cout << "Machine-readable IP: " << signal.ip << "\n";
-  std::cout << "Human-readbale Port: " << signal.portReadable() << "\n";
-  std::cout << "Machine-readbale Port: " << signal.port << "\n";
-  std::cout << "\n";
+  //std::cout << "Human-readable IP: " << signal.ipReadable() << "\n";
+  //std::cout << "Machine-readable IP: " << signal.ip << "\n";
+  //std::cout << "Human-readbale Port: " << signal.portReadable() << "\n";
+  //std::cout << "Machine-readbale Port: " << signal.port << "\n";
+  //std::cout << "\n";
 
-  std::cout << "Path to output:\n";
-  std::cout << "===============\n";
-  std::cout << parser.outputPath() << "\n\n";
+  //std::cout << "Path to output:\n";
+  //std::cout << "===============\n";
+  //std::cout << parser.outputPath() << "\n\n";
 
   if (requireConfig)
   {
-    std::cout << "Path to config:\n";
-    std::cout << "===============\n";
-    std::cout << parser.configPath() << "\n\n";
+    //std::cout << "Path to config:\n";
+    //std::cout << "===============\n";
+    //std::cout << parser.configPath() << "\n\n";
   }
 
-  std::cout << "Doing some initialization...\n\n";
+  //std::cout << "Doing some initialization...\n\n";
 
   // START INIT
   int m = getNrOfBroadcastMessages(std::string(parser.configPath()));
-  std::cout << "Nr of messages per process is: " << m << "\n";
+  //std::cout << "Nr of messages per process is: " << m << "\n";
   logger = new da::tools::Logger(parser.outputPath());
   // END INIT
   Coordinator coordinator(parser.id(), barrier, signal);
-  std::cout << "Waiting for all processes to finish initialization\n\n";
+  //std::cout << "Waiting for all processes to finish initialization\n\n";
   auto &tp = da::threads::InfiniteThreadPool::getInstance();
   coordinator.waitOnBarrier();
 
   // START RECEIVING
-  std::cout << "Start receiving !! \n";
+  //std::cout << "Start receiving !! \n";
   int currentHostIndex = -1;
   for(int i = 0; i < static_cast<int>(hosts.size()); ++i) {
     if(hosts[i].id == parser.id()) {
@@ -141,8 +141,8 @@ int main(int argc, char **argv)
   sendLoop.start_loop();
 
   // START BROADCAST
-  std::cout << "Start broadcasting !! \n";
-  int offset = 1000;
+  //std::cout << "Start broadcasting !! \n";
+  int offset = 10000;
   for (int i = 1; i <= m; i++)
   {
       da::sockets::Data data(static_cast<int>(parser.id()), offset * static_cast<int>(parser.id()) + i);
@@ -152,9 +152,9 @@ int main(int argc, char **argv)
   // Keep broadcasting until we hit the desired nr of delivered messages
   while (true)
   {
-    std::cout << "Nr of delivered items: " << logger->getNrOfDelivers() << "; Nr of threads: " << tp.size();
+    //std::cout << "Nr of delivered items: " << logger->getNrOfDelivers() << "; Nr of threads: " << tp.size();
     if(logger->getNrOfDelivers() >= static_cast<int>(parser.hosts().size()) * m) {
-      std::cout << "App state set to isRunning false" << "\n";
+      //std::cout << "App state set to isRunning false" << "\n";
       da::tools::AppStatus::isRunning = false;
       break;
     }
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
   logger->closeFile();
 
   // END BROADCAST
-  std::cout << "Signaling end of broadcasting messages\n\n";
+  //std::cout << "Signaling end of broadcasting messages\n\n";
   coordinator.finishedBroadcasting();
   exit(0);
 }

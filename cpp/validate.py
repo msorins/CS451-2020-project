@@ -254,13 +254,13 @@ class StressTest:
                     successfulAttempts += 1
                     print("Sending {} to process {}".format(ProcessInfo.stateToSignalStr(op), proc))
 
-                    if op == ProcessState.TERMINATED and proc not in terminatedProcs:
-                        if len(terminatedProcs) < maxTerminatedProcesses:
+                    # if op == ProcessState.TERMINATED and proc not in terminatedProcs:
+                    #     if len(terminatedProcs) < maxTerminatedProcesses:
 
-                            terminatedProcs.add(proc)
+                    #         terminatedProcs.add(proc)
 
-                    if len(terminatedProcs) == maxTerminatedProcesses:
-                        break
+                    # if len(terminatedProcs) == maxTerminatedProcesses:
+                    #     break
 
     def remainingUnterminatedProcesses(self):
         remaining = []
@@ -470,19 +470,19 @@ if __name__ == "__main__":
     testConfig = {
         # Network configuration using the tc command
         'TC': {
-            'delay': ('0ms', '0ms'),
-            'loss': ('0%', '0%'),
-            'reordering': ('0%', '0%')
+            'delay': ('200ms', '50ms'),
+            'loss': ('10%', '25%'),
+            'reordering': ('25%', '50%')
         },
 
         # StressTest configuration
         'ST': {
-            'concurrency' : 0, # How many threads are interferring with the running processes
-            'attempts' : 0, # How many interferring attempts each threads does
+            'concurrency' : 8, # How many threads are interferring with the running processes
+            'attempts' : 8, # How many interferring attempts each threads does
             'attemptsDistribution' : { # Probability with which an interferring thread will
-                'STOP': 0.0,          # select an interferring action (make sure they add up to 1)
-                'CONT': 0.0,
-                'TERM':0.00
+                'STOP': 0.48,          # select an interferring action (make sure they add up to 1)
+                'CONT': 0.48,
+                'TERM':0.04
             }
         }
     }
