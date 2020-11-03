@@ -5,7 +5,6 @@
 #include <vector>
 #include "../sockets/Data.h"
 #include "../sockets/PerfectSocket.h"
-#include "../threads/ThreadPool.h"
 #include "../sockets/SocketType.h"
 #include "../tools/Logger.h"
 #include "parser.hpp"
