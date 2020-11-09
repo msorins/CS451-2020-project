@@ -7,3 +7,5 @@ cpp/src/.idea/
 *.cmake
 
 cpp/src/cmake-build-debug/
+
+.DS_Store

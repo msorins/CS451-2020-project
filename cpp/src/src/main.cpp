@@ -142,10 +142,9 @@ int main(int argc, char **argv)
 
   // START BROADCAST
   //std::cout << "Start broadcasting !! \n";
-  int offset = 10000;
   for (int i = 1; i <= m; i++)
   {
-      da::sockets::Data data(static_cast<int>(parser.id()), offset * static_cast<int>(parser.id()) + i);
+      da::sockets::Data data(static_cast<int>(parser.id()), i);
       logger->writeBroadcast(data.seq_number);
       frb.broadcast(data);
   }
@@ -158,7 +157,7 @@ int main(int argc, char **argv)
       da::tools::AppStatus::isRunning = false;
       break;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 
   // Close File

@@ -46,7 +46,7 @@ namespace da
         }
 
         std::string Data::getMessageIdentifier() {
-          return std::to_string(this->data);
+          return std::to_string(this->original_from_pid) + ":" + std::to_string(this->data);
         }
 
         std::ostream &operator<<(std::ostream &os, const Data &data)
