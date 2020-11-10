@@ -3,6 +3,7 @@
 #include <string>
 #include <mutex>
 #include <atomic>
+#include <unordered_set>
 #ifndef SRC_LOGGER_H
 #define SRC_LOGGER_H
 
@@ -15,6 +16,7 @@ namespace da::tools {
         std::atomic_int nrOfDelivers;
 
     public:
+      std::unordered_set<std::string> delivered;
         Logger(std::string filePath);
         ~Logger();
 

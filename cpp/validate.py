@@ -388,28 +388,30 @@ def main(processes, messages, runscript, broadcastType, logsDir, testConfig):
         st.continueStoppedProcesses()
 
         print("Waiting until all running processes have finished broadcasting.")
-        finishSignalThread.join()
+        # import time
+        # time.sleep(15)
+        # finishSignalThread.join()
 
-        for pid, startTs in OrderedDict(sorted(startTimesFuture.items())).items():
-            print("Process {} finished broadcasting {} messages in {} ms".format(pid, messages, finishSignal.endTimestamps()[pid] - startTs))
+        # for pid, startTs in OrderedDict(sorted(startTimesFuture.items())).items():
+        #     print("Process {} finished broadcasting {} messages in {} ms".format(pid, messages, finishSignal.endTimestamps()[pid] - startTs))
 
-        unterminated = st.remainingUnterminatedProcesses()
-        if unterminated is not None:
-            input('Hit `Enter` to terminate the remaining processes with logicalPIDs {}.'.format(unterminated))
-            st.terminateAllProcesses()
+        # unterminated = st.remainingUnterminatedProcesses()
+        # if unterminated is not None:
+        #     input('Hit `Enter` to terminate the remaining processes with logicalPIDs {}.'.format(unterminated))
+        #     st.terminateAllProcesses()
 
-        mutex = threading.Lock()
+        # mutex = threading.Lock()
 
-        def waitForProcess(logicalPID, procHandle, mutex):
-            procHandle.wait()
+        # def waitForProcess(logicalPID, procHandle, mutex):
+        #     procHandle.wait()
 
-            with mutex:
-                print("Process {} exited with {}".format(logicalPID, procHandle.returncode))
+        #     with mutex:
+        #         print("Process {} exited with {}".format(logicalPID, procHandle.returncode))
 
-        # Monitor which processes have exited
-        monitors = [threading.Thread(target=waitForProcess, args=(logicalPID, procHandle, mutex)) for (logicalPID, procHandle) in procs]
-        [p.start() for p in monitors]
-        [p.join() for p in monitors]
+        # # Monitor which processes have exited
+        # monitors = [threading.Thread(target=waitForProcess, args=(logicalPID, procHandle, mutex)) for (logicalPID, procHandle) in procs]
+        # [p.start() for p in monitors]
+        # [p.join() for p in monitors]
 
         input('Hit `Enter` to validate the output')
         print("Result of validation: {}".format(validation.checkAll()))

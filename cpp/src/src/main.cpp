@@ -137,7 +137,7 @@ int main(int argc, char **argv)
   // END RECEIVING
 
   // START SEND LOOP
-  da::sockets::SendLoop sendLoop;
+  da::sockets::SendLoop sendLoop(*logger);
   sendLoop.start_loop();
 
   // START BROADCAST

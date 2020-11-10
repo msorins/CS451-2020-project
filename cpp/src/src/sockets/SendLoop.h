@@ -6,11 +6,16 @@
 #define SRC_SENDLOOP_H
 
 #include "FairLossSocket.h"
+#include "../tools/Logger.h"
 
 namespace da {
   namespace sockets {
     class SendLoop{
-    public:
+     private:
+      da::tools::Logger &logger;
+
+     public:
+      SendLoop(tools::Logger &logger);
       void start_loop();
 
     };

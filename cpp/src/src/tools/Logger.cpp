@@ -33,6 +33,7 @@ namespace da::tools {
       this->nrOfDelivers += 1;
 
       mtx.lock();
+      this->delivered.insert(std::to_string(from_pid) + ":" + std::to_string(seq_nr));
       std::string logMsg = "d " + std::to_string(from_pid) + " " + std::to_string(seq_nr) + "\n";
       //std::cout << logMsg;
       this->fileHandler << logMsg;
