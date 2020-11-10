@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Project"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="clang"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="da_proc">
+				<Option output="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/da_proc" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir=""/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 da_proc"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="da_proc/fast">
+				<Option output="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/da_proc" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir=""/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 da_proc/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/broadcast/FifoReliableBroadcast.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/broadcast/FifoReliableBroadcast.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/broadcast/UniformReliableBroadcast.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/broadcast/UniformReliableBroadcast.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/main.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/Data.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/Data.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/FairLossSocket.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/FairLossSocket.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/PerfectSocket.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/PerfectSocket.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/SendLoop.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/SendLoop.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/Socket.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/Socket.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/SocketType.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/StubbornSocket.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/sockets/StubbornSocket.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/threads/InfiniteThreadPool.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/threads/InfiniteThreadPool.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/AppStatus.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/AppStatus.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/IObserver.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/ISubject.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/Logger.cpp">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/Logger.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/Observer.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/src/tools/Subject.h">
+			<Option target="da_proc"/>
+		</Unit>
+		<Unit filename="/Users/so/Desktop/EPFL_Y2S1/distributed_algorithms/CS451-2020-project/cpp/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
