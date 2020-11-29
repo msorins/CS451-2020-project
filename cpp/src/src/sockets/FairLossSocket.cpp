@@ -43,24 +43,52 @@ namespace da
 
         void FairLossSocket::send(Data data)
         {
-            // send the data
-            int data_to_send[] = {data.seq_number, data.original_from_pid, data.from_pid, data.to_pid, data.data};
-            sendto(this->socket_file_descriptor, &data_to_send, sizeof(data_to_send), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), sizeof(this->socket_address));
+            // form the data that must be sent
+            std::vector<int> data_to_send = {data.seq_number, data.original_from_pid, data.from_pid, data.to_pid, data.data};
+
+            // form the delivered vector
+            for(auto elem: data.delivered) {
+              data_to_send.push_back(elem.first);
+              data_to_send.push_back(elem.second);
+            }
+
+            // add as the first int the size of the data to be send
+            data_to_send.insert(data_to_send.begin(), static_cast<int>(data_to_send.size()));
+
+            // send the actual data
+            int* data_pointer = &data_to_send[0];
+           sendto(this->socket_file_descriptor, data_pointer, sizeof(int) * static_cast<int>(data_to_send.size()), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), sizeof(this->socket_address));
         }
 
         Data FairLossSocket::receive()
         {
-            // receive the data
             socklen_t socket_addr_sizeof = sizeof(this->socket_address);
-            int data[5];
-            if (recvfrom(this->socket_file_descriptor, &data, sizeof(data), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0)
+           
+            // get data size
+            int data_size = -1;
+            if (recvfrom(this->socket_file_descriptor, &data_size, sizeof(data_size), MSG_PEEK, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0)
+            {
+                perror("cannot receive 3");
+                exit(-1);
+            }
+
+            // get the actual data of data_size
+            std::vector<int> data(data_size + 1);
+            int* data_pointer = &data[0];
+            if (recvfrom(this->socket_file_descriptor, data_pointer, sizeof(int) * static_cast<int>(data.size()), 0, reinterpret_cast<struct sockaddr *>(&this->socket_address), &socket_addr_sizeof) < 0)
             {
                 perror("cannot receive 2");
                 exit(-1);
             }
 
             // Put the data received into the appropiate structure
-            Data formatted_data(data[0], data[1], data[2], data[3], data[4]);
+            Data formatted_data(data[1], data[2], data[3], data[4], data[5]);
+
+            // Put the delivered
+            for(int i = 6; i< static_cast<int>(data.size()); i +=2 ) {
+                formatted_data.delivered.push_back(std::make_pair(data[i], data[i+1]));
+            }
+
             return formatted_data;
         }
 

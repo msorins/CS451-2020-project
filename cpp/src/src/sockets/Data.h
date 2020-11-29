@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-
+#include <vector>
+#include <algorithm>
 #ifndef DATA
 #define DATA
 
@@ -20,6 +21,7 @@ namespace da
             int from_pid;
             int to_pid;
             int data;
+            std::vector<std::pair<int, int>> delivered; // [from_pid, data]
 
             Data();
             Data(int from_pid, int data);

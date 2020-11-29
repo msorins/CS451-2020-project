@@ -82,7 +82,7 @@ namespace da
             //std::cout << "urb deliver: " << data << " ";
             // Commit the delivery to log
             if(commitToLog) {
-              this->logger.writeDeliver(data.from_pid, data.seq_number);
+              this->logger.writeDeliver(data.original_from_pid, data.seq_number);
             }
 
             // Mark the message as delivered in the socket
