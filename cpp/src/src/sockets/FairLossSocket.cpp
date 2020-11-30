@@ -46,8 +46,8 @@ namespace da
             // form the data that must be sent
             std::vector<int> data_to_send = {data.seq_number, data.original_from_pid, data.from_pid, data.to_pid, data.data};
 
-            // form the delivered vector
-            for(auto elem: data.delivered) {
+            // form the past vector
+            for(auto elem: data.past) {
               data_to_send.push_back(elem.first);
               data_to_send.push_back(elem.second);
             }
@@ -86,7 +86,7 @@ namespace da
 
             // Put the delivered
             for(int i = 6; i< static_cast<int>(data.size()); i +=2 ) {
-                formatted_data.delivered.push_back(std::make_pair(data[i], data[i+1]));
+                formatted_data.past.push_back(std::make_pair(data[i], data[i+1]));
             }
 
             return formatted_data;

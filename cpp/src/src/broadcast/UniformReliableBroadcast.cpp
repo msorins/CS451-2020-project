@@ -79,7 +79,6 @@ namespace da
 
         void UniformReliableBroadcast::deliver(da::sockets::Data &data, bool commitToLog)
         {
-            //std::cout << "urb deliver: " << data << " ";
             // Commit the delivery to log
             if(commitToLog) {
               this->logger.writeDeliver(data.original_from_pid, data.seq_number);
@@ -91,16 +90,8 @@ namespace da
             // Add to pending if doesn't exist and broadcast
             if(this->pending.find(data.getUniqueIdentifier()) == this->pending.end()) {
                 this->pending[data.getUniqueIdentifier()] = new da::sockets::Data(data);
-                //std::cout<< ", add to pending ";
                 this->broadcast(data);
             }
-            //std::cout << "\n";
-
-            //std::cout << "pending: ";
-            for(auto elem: this->pending) {
-              //std::cout << elem.first << ", ";
-            }
-            //std::cout << "\n";
         }
 
         bool UniformReliableBroadcast::canDeliver(da::sockets::Data &data)

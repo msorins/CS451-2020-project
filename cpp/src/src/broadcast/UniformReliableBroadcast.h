@@ -33,7 +33,7 @@ namespace da
 
                 UniformReliableBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
 
-                void broadcast(da::sockets::Data &data);
+                virtual void broadcast(da::sockets::Data &data);
 
                 void receive_loop();
 

@@ -9,6 +9,8 @@ namespace da
         // Initialize static seq_number
         int da::sockets::Data::seq_number_static = 0;
 
+        Data::Data(): original_from_pid{0}, from_pid{0}, to_pid{-1}, data{0} {}
+        
         Data::Data(int from_pid, int data) : original_from_pid{from_pid}, from_pid{from_pid}, to_pid{-1}, data{data}
         {
             this->seq_number = da::sockets::Data::increaseSeqNumber();
