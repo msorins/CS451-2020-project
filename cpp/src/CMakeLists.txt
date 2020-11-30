@@ -1,7 +1,7 @@
 # DO NAME THE SYMBOLIC VARIABLE `SOURCES`
 
 include_directories(include)
-set(SOURCES src/main.cpp src/sockets/Socket.cpp src/sockets/Socket.h src/sockets/FairLossSocket.cpp src/sockets/FairLossSocket.h src/sockets/StubbornSocket.cpp src/sockets/StubbornSocket.h src/sockets/Data.cpp src/sockets/Data.h src/sockets/PerfectSocket.cpp src/sockets/PerfectSocket.h src/broadcast/UniformReliableBroadcast.cpp src/broadcast/UniformReliableBroadcast.h src/broadcast/CausalUniformBroadcast.cpp src/broadcast/CausalUniformBroadcast.h src/tools/IObserver.h src/tools/ISubject.h src/tools/Observer.h src/tools/Subject.h src/sockets/SocketType.h src/tools/Logger.cpp src/tools/Logger.h src/broadcast/FifoReliableBroadcast.cpp src/broadcast/FifoReliableBroadcast.h src/tools/AppStatus.h src/tools/AppStatus.cpp src/threads/InfiniteThreadPool.h src/threads/InfiniteThreadPool.cpp src/sockets/SendLoop.cpp src/sockets/SendLoop.h)
+set(SOURCES main.cpp sockets/Socket.cpp sockets/Socket.h sockets/FairLossSocket.cpp sockets/FairLossSocket.h sockets/StubbornSocket.cpp sockets/StubbornSocket.h sockets/Data.cpp sockets/Data.h sockets/PerfectSocket.cpp sockets/PerfectSocket.h broadcast/UniformReliableBroadcast.cpp broadcast/UniformReliableBroadcast.h broadcast/CausalUniformBroadcast.cpp broadcast/CausalUniformBroadcast.h tools/IObserver.h tools/ISubject.h tools/Observer.h tools/Subject.h sockets/SocketType.h tools/Logger.cpp tools/Logger.h broadcast/FifoReliableBroadcast.cpp broadcast/FifoReliableBroadcast.h tools/AppStatus.h tools/AppStatus.cpp threads/InfiniteThreadPool.h threads/InfiniteThreadPool.cpp sockets/SendLoop.cpp sockets/SendLoop.h)
 
 # DO NOT EDIT THE FOLLOWING LINE
 find_package(Threads)

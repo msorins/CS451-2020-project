@@ -4,7 +4,7 @@
 #include <thread>
 #include <fstream>
 #include <signal.h>
-
+#include <unordered_set>
 #include "barrier.hpp"
 #include "parser.hpp"
 #include "sockets/FairLossSocket.h"
@@ -19,6 +19,7 @@
 #include "tools/AppStatus.h"
 
 int getNrOfBroadcastMessages(std::string filePath);
+std::unordered_set<int> getDependencyList(std::string filePath, int forProcess);
 da::tools::Logger *logger;
 
 static void stop(int)
@@ -44,6 +45,41 @@ int getNrOfBroadcastMessages(std::string filePath)
   int m = 0;
   f >> m;
   return m;
+}
+
+std::unordered_set<int> getDependencyList(std::string filePath, int forProcess) {
+  std::unordered_set<int> setOfNumbers;
+  std::ifstream input(filePath);
+  int lineNr = 0;
+  for( std::string line; getline( input, line ); )
+  {
+    std::cout << "\nline: " << line << "----> " << std::flush;
+    if(lineNr == 0) {
+      continue;
+    }
+
+    int digitNr = 0;
+    int digitsForProcId = -1;
+    std::stringstream stream(line);
+    while(1) {
+      std::cout << "intrat " << "\n";
+      int n;
+      stream >> n;
+      std::cout << "nr: " << n << ", " << std::flush;
+      if(!stream)
+          break;
+      if(digitNr == 0) {
+          digitsForProcId = n;
+      } 
+      if(digitNr > 0 && digitsForProcId == forProcess) {
+        setOfNumbers.insert(n);
+      }
+      digitNr++;
+    }
+  }
+
+  setOfNumbers.insert(forProcess);
+  return setOfNumbers;
 }
 
 int main(int argc, char **argv)
@@ -115,6 +151,13 @@ int main(int argc, char **argv)
 
   // START INIT
   int m = getNrOfBroadcastMessages(std::string(parser.configPath()));
+  auto dependencyList = getDependencyList(std::string(parser.configPath()), static_cast<int>(parser.id()));
+  std::cout << "dependencies: ";
+  for(auto dependency: dependencyList) {
+    std::cout << dependency << " ";
+  }
+  std::cout << "\n" << std::flush;
+
   //std::cout << "Nr of messages per process is: " << m << "\n";
   logger = new da::tools::Logger(parser.outputPath());
   // END INIT
@@ -131,7 +174,7 @@ int main(int argc, char **argv)
     }
   }
   auto selfSocket = da::sockets::PerfectSocket(hosts[currentHostIndex].ipReadable(), static_cast<int>(hosts[currentHostIndex].portReadable()), da::sockets::SocketType::RECEIVE);
-  da::broadcast::CausalUniformBroadcast frb(static_cast<int>(parser.id()), parser.hosts(), *logger, selfSocket);
+  da::broadcast::CausalUniformBroadcast frb(static_cast<int>(parser.id()), parser.hosts(), *logger, selfSocket, dependencyList);
   frb.receive_loop();
   // END RECEIVING
 

@@ -11,7 +11,8 @@
 namespace da {
   namespace broadcast {
     std::mutex mtx;
-    CausalUniformBroadcast::CausalUniformBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket): UniformReliableBroadcast(current_pid, hosts, logger, socket) {
+    CausalUniformBroadcast::CausalUniformBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket, std::unordered_set<int> &dependency_list): UniformReliableBroadcast(current_pid, hosts, logger, socket) {
+      this->dependency_list = dependency_list;
       this->next.resize(hosts.size() + 3);
       std::fill(this->next.begin(), this->next.end(), 1);
     }
@@ -19,7 +20,7 @@ namespace da {
     void CausalUniformBroadcast::broadcast(da::sockets::Data &data) {
       std::cout << "cub broadcast: " << data << "\n" << std::flush;
       data.past = past;
-      if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+      if(isInPast.find(data.getMessageIdentifier()) == isInPast.end() && this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()) {
         past.push_back(std::make_pair(data.original_from_pid, data.data));
         isInPast.insert(data.getMessageIdentifier());
       }
@@ -42,7 +43,7 @@ namespace da {
             toDeliver.data = dataPast.second;
             // To do: add a seq numebr
             toDeliver.seq_number = dataPast.second;
-            if(isInPast.find(pastMsgIdentifier) == isInPast.end()) {
+            if(isInPast.find(pastMsgIdentifier) == isInPast.end() && this->dependency_list.find(dataPast.first) != this->dependency_list.end()) {
               past.push_back(dataPast);
               isInPast.insert(pastMsgIdentifier);
             }
@@ -52,7 +53,7 @@ namespace da {
       }
 
       // Once the past is delivered, deliver the current data
-      if(wasDelivered.find(data.getMessageIdentifier()) == wasDelivered.end()) {
+      if(wasDelivered.find(data.getMessageIdentifier()) == wasDelivered.end() && this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()) {
         UniformReliableBroadcast::deliver(data, true);
         wasDelivered.insert(data.getMessageIdentifier());
         if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
