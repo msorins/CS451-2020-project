@@ -17,6 +17,7 @@ namespace da {
     }
 
     void CausalUniformBroadcast::broadcast(da::sockets::Data &data) {
+      std::cout << "cub broadcast: " << data << "\n" << std::flush;
       data.past = past;
       if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
         past.push_back(std::make_pair(data.original_from_pid, data.data));
@@ -26,8 +27,10 @@ namespace da {
     }
 
     void CausalUniformBroadcast::deliver(da::sockets::Data &data, bool commitToLog) {
+      std::cout << "cub deliver: " << data << ": ";
       // First try to deliver the past
       for(auto dataPast: data.past) {
+        std::cout << dataPast.first << " -> " << dataPast.second << ", ";
         std::string pastMsgIdentifier =  std::to_string(dataPast.first) + ":" + std::to_string(dataPast.second);
         
         // if it was not delivered, then deliver
@@ -49,9 +52,9 @@ namespace da {
       }
 
       // Once the past is delivered, deliver the current data
-      if(wasDelivered.find(data.getUniqueIdentifier()) == wasDelivered.end()) {
+      if(wasDelivered.find(data.getMessageIdentifier()) == wasDelivered.end()) {
         UniformReliableBroadcast::deliver(data, true);
-        wasDelivered.insert(data.getUniqueIdentifier());
+        wasDelivered.insert(data.getMessageIdentifier());
         if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
           past.push_back(std::make_pair(data.original_from_pid, data.data));
           isInPast.insert(data.getMessageIdentifier());

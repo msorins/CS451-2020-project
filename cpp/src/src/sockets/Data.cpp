@@ -54,7 +54,7 @@ namespace da
 
         std::ostream &operator<<(std::ostream &os, const Data &data)
         {
-            os <<  "seq_nr: " << data.seq_number << ", from_pid: " << data.from_pid << ", original_from_pid:" << data.original_from_pid << ", to_pid: " << data.to_pid << ", data: " << data.data << ", past sz " << data.past.size() << "\n";
+            os <<  "seq_nr: " << data.seq_number << ", from_pid: " << data.from_pid << ", original_from_pid:" << data.original_from_pid << ", to_pid: " << data.to_pid << ", data: " << data.data << ", past sz " << data.past.size();
             return os;
         }
     } // namespace sockets
