@@ -18,21 +18,16 @@ namespace da {
 
     void CausalUniformBroadcast::broadcast(da::sockets::Data &data) {
       data.past = past;
-      past.push_back(std::make_pair(data.original_from_pid, data.data));
+      if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+        past.push_back(std::make_pair(data.original_from_pid, data.data));
+        isInPast.insert(data.getMessageIdentifier());
+      }
       UniformReliableBroadcast::broadcast(data);
-
-      // std::cout << "cub broadcast " << data << " of past size: " << data.past.size() << "\n" << std::flush;
-      // for(auto dataPast: data.past) {
-      //   std::cout << dataPast.first << " -> " << dataPast.second << "\n "<< std::flush;
-      // }
-      // std::cout << "\n" << std::flush;
     }
 
     void CausalUniformBroadcast::deliver(da::sockets::Data &data, bool commitToLog) {
-      // std::cout << "cub deliver  " << data << " of past size: " << data.past.size() << "\n" << std::flush;
       // First try to deliver the past
       for(auto dataPast: data.past) {
-        // std::cout << dataPast.first << " -> " << dataPast.second << "\n" << std::flush;
         std::string pastMsgIdentifier =  std::to_string(dataPast.first) + ":" + std::to_string(dataPast.second);
         
         // if it was not delivered, then deliver
@@ -44,7 +39,10 @@ namespace da {
             toDeliver.data = dataPast.second;
             // To do: add a seq numebr
             toDeliver.seq_number = dataPast.second;
-            past.push_back(dataPast);
+            if(isInPast.find(pastMsgIdentifier) == isInPast.end()) {
+              past.push_back(dataPast);
+              isInPast.insert(pastMsgIdentifier);
+            }
             wasDelivered.insert(pastMsgIdentifier);
             UniformReliableBroadcast::deliver(toDeliver, true);
         }
@@ -54,7 +52,10 @@ namespace da {
       if(wasDelivered.find(data.getUniqueIdentifier()) == wasDelivered.end()) {
         UniformReliableBroadcast::deliver(data, true);
         wasDelivered.insert(data.getUniqueIdentifier());
-        past.push_back(std::make_pair(data.original_from_pid, data.data));
+        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+          past.push_back(std::make_pair(data.original_from_pid, data.data));
+          isInPast.insert(data.getMessageIdentifier());
+        }
       }
     }
   }

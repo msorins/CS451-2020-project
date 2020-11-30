@@ -16,7 +16,9 @@ namespace da {
   protected:
       std::vector<int> next;
       std::unordered_set<std::string> wasDelivered;
+
       std::vector<std::pair<int,int>> past; // <source, data>
+      std::unordered_set<std::string> isInPast;
 
   public:
       CausalUniformBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket);
