@@ -10,7 +10,7 @@ namespace da
         int da::sockets::Data::seq_number_static = 0;
 
         Data::Data(): original_from_pid{0}, from_pid{0}, to_pid{-1}, data{0} {}
-        
+
         Data::Data(int from_pid, int data) : original_from_pid{from_pid}, from_pid{from_pid}, to_pid{-1}, data{data}
         {
             this->seq_number = da::sockets::Data::increaseSeqNumber();
@@ -35,6 +35,7 @@ namespace da
             this->original_from_pid = other.original_from_pid;
             this->to_pid = other.to_pid;
             this->data = other.data;
+            this->past = other.past;
         }
 
         int Data::increaseSeqNumber()
@@ -53,7 +54,7 @@ namespace da
 
         std::ostream &operator<<(std::ostream &os, const Data &data)
         {
-            os <<  "seq_nr: " << data.seq_number << ", from_pid: " << data.from_pid << ", original_from_pid:" << data.original_from_pid << ", to_pid: " << data.to_pid << ", data: " << data.data;
+            os <<  "seq_nr: " << data.seq_number << ", from_pid: " << data.from_pid << ", original_from_pid:" << data.original_from_pid << ", to_pid: " << data.to_pid << ", data: " << data.data << ", past sz " << data.past.size() << "\n";
             return os;
         }
     } // namespace sockets

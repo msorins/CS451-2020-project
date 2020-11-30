@@ -124,7 +124,6 @@ int main(int argc, char **argv)
   coordinator.waitOnBarrier();
 
   // START RECEIVING
-  //std::cout << "Start receiving !! \n";
   int currentHostIndex = -1;
   for(int i = 0; i < static_cast<int>(hosts.size()); ++i) {
     if(hosts[i].id == parser.id()) {
