@@ -50,11 +50,12 @@ int getNrOfBroadcastMessages(std::string filePath)
 std::unordered_set<int> getDependencyList(std::string filePath, int forProcess) {
   std::unordered_set<int> setOfNumbers;
   std::ifstream input(filePath);
+  std::string line;
   int lineNr = 0;
-  for( std::string line; getline( input, line ); )
+  while(getline(input, line))
   {
-    std::cout << "\nline: " << line << "----> " << std::flush;
     if(lineNr == 0) {
+      lineNr++;
       continue;
     }
 
@@ -62,12 +63,11 @@ std::unordered_set<int> getDependencyList(std::string filePath, int forProcess) 
     int digitsForProcId = -1;
     std::stringstream stream(line);
     while(1) {
-      std::cout << "intrat " << "\n";
       int n;
       stream >> n;
-      std::cout << "nr: " << n << ", " << std::flush;
-      if(!stream)
-          break;
+      if(!stream) {
+        break;
+      }
       if(digitNr == 0) {
           digitsForProcId = n;
       } 
