@@ -53,10 +53,10 @@ namespace da {
       }
 
       // Once the past is delivered, deliver the current data
-      if(wasDelivered.find(data.getMessageIdentifier()) == wasDelivered.end() && this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()) {
+      if(wasDelivered.find(data.getMessageIdentifier()) == wasDelivered.end()) {
         UniformReliableBroadcast::deliver(data, true);
         wasDelivered.insert(data.getMessageIdentifier());
-        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end() && this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()) {
           past.push_back(std::make_pair(data.original_from_pid, data.data));
           isInPast.insert(data.getMessageIdentifier());
         }
