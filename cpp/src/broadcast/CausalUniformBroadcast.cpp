@@ -20,7 +20,7 @@ namespace da {
       std::cout << "cub broadcast: " << data << "\n" << std::flush;
 
       UniformReliableBroadcast::broadcast(data);
-      //&& this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()
+      // && this->dependency_list.find(data.from_pid) != this->dependency_list.end()
       if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
         da::sockets::Data dataCopy(data);
         dataCopy.past = std::vector<da::sockets::Data>();
@@ -40,8 +40,7 @@ namespace da {
             wasDelivered.insert(dataPast.getMessageIdentifier());
             UniformReliableBroadcast::deliver(dataPast, true);
 
-             //  && this->dependency_list.find(dataPast.first) != this->dependency_list.end()
-            if(isInPast.find(dataPast.getMessageIdentifier()) == isInPast.end()) {
+            if(isInPast.find(dataPast.getMessageIdentifier()) == isInPast.end() && this->dependency_list.find(dataPast.from_pid) != this->dependency_list.end()) {
                da::sockets::Data dataCopy(dataPast);
               dataCopy.past = std::vector<da::sockets::Data>();
               past.push_back(dataCopy);
@@ -55,8 +54,7 @@ namespace da {
         UniformReliableBroadcast::deliver(data, true);
         wasDelivered.insert(data.getMessageIdentifier());
 
-        // this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()
-        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end() && this->dependency_list.find(data.from_pid) != this->dependency_list.end()) {
           da::sockets::Data dataCopy(data);
           dataCopy.past = std::vector<da::sockets::Data>();
           past.push_back(dataCopy);
