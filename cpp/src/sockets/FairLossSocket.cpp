@@ -48,8 +48,11 @@ namespace da
 
             // form the past vector
             for(auto elem: data.past) {
-              data_to_send.push_back(elem.first);
-              data_to_send.push_back(elem.second);
+              data_to_send.push_back(elem.seq_number);
+              data_to_send.push_back(elem.original_from_pid);
+              data_to_send.push_back(elem.from_pid);
+              data_to_send.push_back(elem.to_pid);
+              data_to_send.push_back(elem.data);
             }
 
             // add as the first int the size of the data to be send
@@ -85,8 +88,10 @@ namespace da
             Data formatted_data(data[1], data[2], data[3], data[4], data[5]);
 
             // Put the delivered
-            for(int i = 6; i< static_cast<int>(data.size()); i +=2 ) {
-                formatted_data.past.push_back(std::make_pair(data[i], data[i+1]));
+            for(int i = 6; i< static_cast<int>(data.size()); i += 5 ) {
+                Data pastData(data[i], data[i+1], data[i+2], data[i+3], data[i+4]);
+                formatted_data.past.push_back(pastData);
+                std::cout << "fls receive: " << pastData << "\n";
             }
 
             return formatted_data;

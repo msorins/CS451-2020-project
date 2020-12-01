@@ -14,11 +14,10 @@ namespace da {
   namespace broadcast {
   class CausalUniformBroadcast: public UniformReliableBroadcast {
   protected:
-      std::vector<int> next;
       std::unordered_set<int> dependency_list;
       std::unordered_set<std::string> wasDelivered;
 
-      std::vector<std::pair<int,int>> past; // <source, data>
+      std::vector<da::sockets::Data> past; // <source, data>
       std::unordered_set<std::string> isInPast;
 
   public:

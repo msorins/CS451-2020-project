@@ -21,7 +21,7 @@ namespace da
             int from_pid;
             int to_pid;
             int data;
-            std::vector<std::pair<int, int>> past; // [from_pid, data]
+            std::vector<Data> past; // [from_pid, data]
 
             Data();
             Data(int from_pid, int data);

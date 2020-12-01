@@ -13,42 +13,40 @@ namespace da {
     std::mutex mtx;
     CausalUniformBroadcast::CausalUniformBroadcast(int current_pid, std::vector<Parser::Host> hosts, da::tools::Logger &logger, da::sockets::PerfectSocket &socket, std::unordered_set<int> &dependency_list): UniformReliableBroadcast(current_pid, hosts, logger, socket) {
       this->dependency_list = dependency_list;
-      this->next.resize(hosts.size() + 3);
-      std::fill(this->next.begin(), this->next.end(), 1);
     }
 
     void CausalUniformBroadcast::broadcast(da::sockets::Data &data) {
-      std::cout << "cub broadcast: " << data << "\n" << std::flush;
       data.past = past;
-      if(isInPast.find(data.getMessageIdentifier()) == isInPast.end() && this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()) {
-        past.push_back(std::make_pair(data.original_from_pid, data.data));
+      std::cout << "cub broadcast: " << data << "\n" << std::flush;
+
+      UniformReliableBroadcast::broadcast(data);
+      //&& this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()
+      if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+        da::sockets::Data dataCopy(data);
+        dataCopy.past = std::vector<da::sockets::Data>();
+        past.push_back(dataCopy);
         isInPast.insert(data.getMessageIdentifier());
       }
-      UniformReliableBroadcast::broadcast(data);
     }
 
     void CausalUniformBroadcast::deliver(da::sockets::Data &data, bool commitToLog) {
       std::cout << "cub deliver: " << data << ": ";
       // First try to deliver the past
       for(auto dataPast: data.past) {
-        std::cout << dataPast.first << " -> " << dataPast.second << ", ";
-        std::string pastMsgIdentifier =  std::to_string(dataPast.first) + ":" + std::to_string(dataPast.second);
-        
+        // std::cout << dataPast.first << " -> " << dataPast.second << ", ";
         // if it was not delivered, then deliver
-        if(wasDelivered.find(pastMsgIdentifier) == wasDelivered.end()) {
+        if(wasDelivered.find(dataPast.getMessageIdentifier()) == wasDelivered.end()) {
             // Wrap the pair <from_pid, data> to a data object and call the underlying urb
-            da::sockets::Data toDeliver;
-            toDeliver.from_pid = dataPast.first;
-            toDeliver.original_from_pid = dataPast.first;
-            toDeliver.data = dataPast.second;
-            // To do: add a seq numebr
-            toDeliver.seq_number = dataPast.second;
-            if(isInPast.find(pastMsgIdentifier) == isInPast.end() && this->dependency_list.find(dataPast.first) != this->dependency_list.end()) {
-              past.push_back(dataPast);
-              isInPast.insert(pastMsgIdentifier);
+            wasDelivered.insert(dataPast.getMessageIdentifier());
+            UniformReliableBroadcast::deliver(dataPast, true);
+
+             //  && this->dependency_list.find(dataPast.first) != this->dependency_list.end()
+            if(isInPast.find(dataPast.getMessageIdentifier()) == isInPast.end()) {
+               da::sockets::Data dataCopy(dataPast);
+              dataCopy.past = std::vector<da::sockets::Data>();
+              past.push_back(dataCopy);
+              isInPast.insert(dataPast.getMessageIdentifier());
             }
-            wasDelivered.insert(pastMsgIdentifier);
-            UniformReliableBroadcast::deliver(toDeliver, true);
         }
       }
 
@@ -56,8 +54,12 @@ namespace da {
       if(wasDelivered.find(data.getMessageIdentifier()) == wasDelivered.end()) {
         UniformReliableBroadcast::deliver(data, true);
         wasDelivered.insert(data.getMessageIdentifier());
-        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end() && this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()) {
-          past.push_back(std::make_pair(data.original_from_pid, data.data));
+
+        // this->dependency_list.find(data.original_from_pid) != this->dependency_list.end()
+        if(isInPast.find(data.getMessageIdentifier()) == isInPast.end()) {
+          da::sockets::Data dataCopy(data);
+          dataCopy.past = std::vector<da::sockets::Data>();
+          past.push_back(dataCopy);
           isInPast.insert(data.getMessageIdentifier());
         }
       }
