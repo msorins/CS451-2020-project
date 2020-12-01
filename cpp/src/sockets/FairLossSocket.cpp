@@ -91,7 +91,6 @@ namespace da
             for(int i = 6; i< static_cast<int>(data.size()); i += 5 ) {
                 Data pastData(data[i], data[i+1], data[i+2], data[i+3], data[i+4]);
                 formatted_data.past.push_back(pastData);
-                std::cout << "fls receive: " << pastData << "\n";
             }
 
             return formatted_data;
