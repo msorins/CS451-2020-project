@@ -90,6 +90,9 @@ namespace da
             // Put the delivered
             for(int i = 6; i< static_cast<int>(data.size()); i += 5 ) {
                 Data pastData(data[i], data[i+1], data[i+2], data[i+3], data[i+4]);
+                if(pastData.seq_number == 0) {
+                    continue;
+                }
                 formatted_data.past.push_back(pastData);
             }
 
